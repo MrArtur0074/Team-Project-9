@@ -1,0 +1,81 @@
+# Build directories
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Mono auto-generated files
+mono_crash.*
+
+# Visual Studio specific
+.vs/
+*.vcxproj.user
+*.pdb
+*.opendb
+
+# Rider specific
+.idea/
+*.sln.iml
+
+# Avalonia and .NET specific files
+*.db
+*.svclog
+*.ide.log
+
+# Logs
+*.log
+*.tlog
+*.trace
+
+# Generated files
+*.generated.cs
+*.designer.cs
+*.g.cs
+*.g.i.cs
+
+# OS-specific files
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+.directory
+
+# Dependency caches
+node_modules/
+bower_components/
+
+# Avalonia specific cache
+.cache/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+
+# Unit test results
+TestResults/
+
+# Backup files
+*.bak
+*.swp
+*.tmp
+*.temp
+
+# Execution temporary files
+~$*
+
+# Azure DevOps
+.azure-devops/
