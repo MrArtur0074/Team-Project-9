@@ -37,12 +37,12 @@ public abstract class Wing
 
 	public Airfoil RootAirfoil {
 		get => _rootAirfoil;
-		set => _rootAirfoil = value ?? throw new NullReferenceException("Root airfoil cannot be null!");
+		set => _rootAirfoil = value ?? throw new ArgumentNullException("Root airfoil cannot be null!");
 	}
 	
 	public Airfoil TipAirfoil {
 		get => _tipAirfoil;
-		set => _tipAirfoil = value ?? throw new NullReferenceException("Tip airfoil cannot be null!");
+		set => _tipAirfoil = value ?? throw new ArgumentNullException("Tip airfoil cannot be null!");
 	}
 	
 	protected Wing(int span, float incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
