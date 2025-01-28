@@ -1,5 +1,4 @@
 using System;
-using Avalonia.Controls.Documents;
 
 namespace Project_9.Models;
 
@@ -9,8 +8,8 @@ namespace Project_9.Models;
 /// </summary>
 public abstract class Wing
 {
-	private int   _span; // mm
-	private float _incidenceAngle; // degree
+	private int   _span;
+	private float _incidenceAngle;
 
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
