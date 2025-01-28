@@ -18,12 +18,14 @@ public abstract class Wing
 	/// <summary>
 	/// Gets or sets the span of the wing in millimeters.
 	/// </summary>
-	/// <exception cref="ArgumentException">Thrown when the span is out of the defined range.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the span is out of the defined range.
+	/// </exception>
 	public int Span {
 		get => _span;
 		set {
 			if (value is < WingParameters.MinWingSpan or > WingParameters.MaxWingSpan) {
-				throw new ArgumentException(
+				throw new ArgumentOutOfRangeException(
 					$"Span must be in range " +
 					$"[{WingParameters.MinWingSpan}; {WingParameters.MaxWingSpan}]");
 			}
@@ -34,12 +36,14 @@ public abstract class Wing
 	/// <summary>
 	/// Gets or sets the incidence angle of the wing in degrees.
 	/// </summary>
-	/// <exception cref="ArgumentException">Thrown when the incidence angle is out of the defined range.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the incidence angle is out of the defined range.
+	/// </exception>
 	public float IncidenceAngle {
 		get => _incidenceAngle;
 		set {
 			if (value is < WingParameters.MinIncidenceAngle or > WingParameters.MaxIncidenceAngle) {
-				throw new ArgumentException(
+				throw new ArgumentOutOfRangeException(
 					$"Incidence angle must be in range " +
 					$"[{WingParameters.MinIncidenceAngle}; {WingParameters.MaxIncidenceAngle}]");
 			}
