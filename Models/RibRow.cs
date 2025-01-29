@@ -19,7 +19,7 @@ public class RibRow
 	/// <exception cref="ArgumentException">Thrown when the span is less than or equal to 0.</exception>
 	public RibRow(int span) {
 		if (span < 0) {
-			throw new ArgumentException("_span must be grater than 0.");
+			throw new ArgumentException("Span must be greater than 0.");
 		}
 		_span = span;
 		_ribs.Add(0);
