@@ -50,6 +50,18 @@ public static class WingParameters
 	public const float MaxSweepCoefficient = 1f;
 
 	/// <summary>
+	/// The minimum allowable elliptical wingtip exclusion ratio
+	/// relative to the wingspan.
+	/// </summary>
+	public const float MinTipExclusionRatio = 0.1f;
+	
+	/// <summary>
+	/// The maximum allowable elliptical wingtip exclusion ratio
+	/// relative to the wingspan.
+	/// </summary>
+	public const float MaxTipExclusionRatio = 0.5f;
+
+	/// <summary>
 	/// The minimum allowable incidence angle of the wing, measured in degrees.
 	/// </summary>
 	public const float MinIncidenceAngle = -5f;
