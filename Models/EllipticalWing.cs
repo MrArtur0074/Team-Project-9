@@ -12,6 +12,10 @@ public class EllipticalWing : Wing, IEllipticalWing
 	private float _sweepCoefficient;
 	private float _tipExclusionRatio;
 	
+	/// <inheritdoc />
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the sweep coefficient is out of the defined range.
+	///</exception>
 	public float SweepCoefficient {
 		get => _sweepCoefficient;
 		set {
@@ -24,6 +28,10 @@ public class EllipticalWing : Wing, IEllipticalWing
 		} 
 	}
 
+	/// <inheritdoc />
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the exclusion ratio value is out of the defined range.
+	///</exception>
 	public float TipExclusionRatio {
 		get => _tipExclusionRatio;
 		set {
@@ -36,13 +44,10 @@ public class EllipticalWing : Wing, IEllipticalWing
 		}
 	}
 	
+	/// <inheritdoc />
 	/// <summary>
 	/// Initializes a new instance of the <see cref="EllipticalWing"/> class with the specified parameters.
 	/// </summary>
-	/// <param name="span">The span of the wing in millimeters.</param>
-	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
-	/// <param name="rootAirfoil">The root airfoil of the wing.</param>
-	/// <param name="tipAirfoil">The tip airfoil of the wing.</param>
 	/// <param name="sweep">The sweep coefficient, defining the curvature of the leading edge.</param>
 	/// <param name="tipExclusion">The ratio of the tip exclusion, limiting the rib generation area.</param>
 	public EllipticalWing(int span, float incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
