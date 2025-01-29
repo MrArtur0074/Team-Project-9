@@ -11,7 +11,8 @@ public interface IEllipticalWing
 	public float SweepCoefficient { get; set; }
 	
 	/// <summary>
-	/// Gets or sets the length to exclude at the tip of the wing in millimeters.
+	/// Gets or sets the ratio relative to the wingspan
+	/// to exclude at the tip of the wing in millimeters.
 	/// </summary>
-	public int TipExclusionLength { get; set; }
+	public float TipExclusionRatio { get; set; }
 }
