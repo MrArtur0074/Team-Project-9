@@ -76,10 +76,10 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	}
 
 	public override double GetArea() {
-		throw new System.NotImplementedException();
+		return Double.Pi * Chord * Span / 4.0;
 	}
 
 	public override double GetAspectRatio() {
-		throw new System.NotImplementedException();
+		return Span * 4.0 / (Double.Pi * Chord);
 	}
 }
