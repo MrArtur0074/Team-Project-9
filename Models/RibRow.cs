@@ -12,6 +12,8 @@ public class RibRow
 	private readonly int            _span;
 	private readonly SortedSet<int> _ribs = new();
 
+	public IReadOnlySet<int> Ribs { get => _ribs; }
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RibRow"/> class with a specified span.
 	/// </summary>
@@ -45,14 +47,6 @@ public class RibRow
 	/// <returns><c>true</c> if the rib was removed successfully; otherwise, <c>false</c>.</returns>
 	public bool RemoveRib(int position) {
 		return _ribs.Remove(position);
-	}
-
-	/// <summary>
-	/// Gets the positions of all ribs in the rib row.
-	/// </summary>
-	/// <returns>An array of integers representing the positions of the ribs.</returns>
-	public int[] GetRibs() {
-		return _ribs.ToArray();
 	}
 
 	/// <summary>
