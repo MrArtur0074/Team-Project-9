@@ -9,8 +9,8 @@ namespace Project_9.Models;
 /// </summary>
 public class TaperedWing : Wing, ITaperedWing
 {
-	private int   _rootChord;
-	private float _taperRatio;
+	private int    _rootChord;
+	private double _taperRatio;
 
 	/// <inheritdoc />
 	/// <exception cref="ArgumentOutOfRangeException">
@@ -32,7 +32,7 @@ public class TaperedWing : Wing, ITaperedWing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the taper ratio is out of the defined range.
 	/// </exception>
-	public float TaperRatio {
+	public double TaperRatio {
 		get => _taperRatio;
 		set {
 			if (value is < WingParameters.MinTaperRatio or > WingParameters.MaxTaperRatio) {
@@ -51,21 +51,21 @@ public class TaperedWing : Wing, ITaperedWing
 	/// <param name="taperRatio">The taper ratio of the wing.</param>
 	public TaperedWing(
 		int span, 
-		float incidenceAngle, 
+		double incidenceAngle, 
 		Airfoil rootAirfoil, 
 		Airfoil tipAirfoil, 
 		int rootChord, 
-		float taperRatio
+		double taperRatio
 	) : base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		RootChord = rootChord;
 		TaperRatio = taperRatio;
 	}
 
-	public override float GetArea() {
-		return (1f + _taperRatio) * _rootChord * Span;
+	public override double GetArea() {
+		return (1.0 + _taperRatio) * _rootChord * Span;
 	}
 
-	public override float GetAspectRatio() {
-		return Span / (1f + _taperRatio) * _rootChord;
+	public override double GetAspectRatio() {
+		return Span / (1.0 + _taperRatio) * _rootChord;
 	}
 }

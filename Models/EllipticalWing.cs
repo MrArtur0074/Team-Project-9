@@ -9,9 +9,9 @@ namespace Project_9.Models;
 /// </summary>
 public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 {
-	private int   _chord;
-	private float _sweepCoefficient;
-	private float _tipExclusionRatio;
+	private int    _chord;
+	private double _sweepCoefficient;
+	private double _tipExclusionRatio;
 	
 	/// <inheritdoc />
 	/// <exception cref="ArgumentOutOfRangeException">
@@ -32,7 +32,7 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the sweep coefficient is out of the defined range.
 	///</exception>
-	public float SweepCoefficient {
+	public double SweepCoefficient {
 		get => _sweepCoefficient;
 		set {
 			if (value is < WingParameters.MinSweepCoefficient or > WingParameters.MaxSweepCoefficient) {
@@ -48,7 +48,7 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the exclusion ratio value is out of the defined range.
 	///</exception>
-	public float TipExclusionRatio {
+	public double TipExclusionRatio {
 		get => _tipExclusionRatio;
 		set {
 			if (value is < WingParameters.MinTipExclusionRatio or > WingParameters.MaxTipExclusionRatio) {
@@ -67,19 +67,19 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	/// <param name="chord">The length of the wing root chord.</param>>
 	/// <param name="sweep">The sweep coefficient, defining the curvature of the leading edge.</param>
 	/// <param name="tipExclusion">The ratio of the tip exclusion, limiting the rib generation area.</param>
-	public EllipticalWing(int span, float incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
-		int chord, float sweep, int tipExclusion) 
+	public EllipticalWing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
+		int chord, double sweep, int tipExclusion) 
 		: base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		Chord = chord;
 		SweepCoefficient = sweep;
 		TipExclusionRatio = tipExclusion;
 	}
 
-	public override float GetArea() {
+	public override double GetArea() {
 		throw new System.NotImplementedException();
 	}
 
-	public override float GetAspectRatio() {
+	public override double GetAspectRatio() {
 		throw new System.NotImplementedException();
 	}
 }

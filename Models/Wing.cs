@@ -9,7 +9,7 @@ namespace Project_9.Models;
 public abstract class Wing
 {
 	private int   _span;
-	private float _incidenceAngle;
+	private double _incidenceAngle;
 
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
@@ -40,7 +40,7 @@ public abstract class Wing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the incidence angle is out of the defined range.
 	/// </exception>
-	public float IncidenceAngle {
+	public double IncidenceAngle {
 		get => _incidenceAngle;
 		set {
 			if (value is < WingParameters.MinIncidenceAngle or > WingParameters.MaxIncidenceAngle) {
@@ -82,7 +82,7 @@ public abstract class Wing
 	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
 	/// <param name="rootAirfoil">The root airfoil of the wing.</param>
 	/// <param name="tipAirfoil">The tip airfoil of the wing.</param>
-	protected Wing(int span, float incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+	protected Wing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
 		Span = span;
 		IncidenceAngle = incidenceAngle;
 		RootAirfoil = rootAirfoil;
@@ -94,11 +94,11 @@ public abstract class Wing
 	/// Calculates the area of the wing.
 	/// </summary>
 	/// <returns>The area of the wing in square millimeters.</returns>
-	public abstract float GetArea();
+	public abstract double GetArea();
 	
 	/// <summary>
 	/// Calculates the aspect ratio of the wing.
 	/// </summary>
 	/// <returns>The aspect ratio of the wing.</returns>
-	public abstract float GetAspectRatio();
+	public abstract double GetAspectRatio();
 }

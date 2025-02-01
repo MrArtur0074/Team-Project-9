@@ -31,16 +31,16 @@ public class StraightWing : Wing, ISingleChordWing
 	/// Initializes a new instance of the <see cref="StraightWing"/> class with the specified parameters.
 	/// </summary>
 	/// <param name="chord">The length of the wing chord.</param>
-	public StraightWing(int span, float incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, int chord) 
+	public StraightWing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, int chord) 
 		: base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		Chord = chord;
 	}
 
-	public override float GetArea() {
+	public override double GetArea() {
 		return Span * _chord;
 	}
 
-	public override float GetAspectRatio() {
-		return (float) Span / _chord;
+	public override double GetAspectRatio() {
+		return (double) Span / _chord;
 	}
 }

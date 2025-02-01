@@ -29,55 +29,55 @@ public static class WingParameters
 	/// The minimum allowable taper ratio, which is the ratio of the tip chord 
 	/// length to the root chord length.
 	/// </summary>
-	public const float MinTaperRatio = 0.1f;
+	public const double MinTaperRatio = 0.1;
 
 	/// <summary>
 	/// The maximum allowable taper ratio, which is the ratio of the tip chord 
 	/// length to the root chord length.
 	/// </summary>
-	public const float MaxTaperRatio = 1f;
+	public const double MaxTaperRatio = 1.0;
 
 	/// <summary>
 	/// The minimum allowable sweep coefficient, defining the curvature of
 	/// the elliptical wing.
 	/// </summary>
-	public const float MinSweepCoefficient = -1f;
+	public const double MinSweepCoefficient = -1.0;
 
 	/// <summary>
 	/// The maximum allowable sweep coefficient, defining the curvature of 
 	/// the elliptical wing.
 	/// </summary>
-	public const float MaxSweepCoefficient = 1f;
+	public const double MaxSweepCoefficient = 1.0;
 
 	/// <summary>
 	/// The minimum allowable elliptical wingtip exclusion ratio
 	/// relative to the wingspan.
 	/// </summary>
-	public const float MinTipExclusionRatio = 0.1f;
+	public const double MinTipExclusionRatio = 0.1;
 	
 	/// <summary>
 	/// The maximum allowable elliptical wingtip exclusion ratio
 	/// relative to the wingspan.
 	/// </summary>
-	public const float MaxTipExclusionRatio = 0.5f;
+	public const double MaxTipExclusionRatio = 0.5;
 
 	/// <summary>
 	/// The minimum allowable incidence angle of the wing, measured in degrees.
 	/// </summary>
-	public const float MinIncidenceAngle = -5f;
+	public const double MinIncidenceAngle = -5.0;
 
 	/// <summary>
 	/// The maximum allowable incidence angle of the wing, measured in degrees.
 	/// </summary>
-	public const float MaxIncidenceAngle = 15f;
+	public const double MaxIncidenceAngle = 15.0;
 
 	/// <summary>
 	/// The minimum allowable sweep angle of the wing, measured in degrees.
 	/// </summary>
-	public const float MinSweepAngle = 0f;
+	public const double MinSweepAngle = 0.0;
 
 	/// <summary>
 	/// The maximum allowable sweep angle of the wing, measured in degrees.
 	/// </summary>
-	public const float MaxSweepAngle = 45f;
+	public const double MaxSweepAngle = 45.0;
 }
