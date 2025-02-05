@@ -80,4 +80,16 @@ public static class WingParameters
 	/// The maximum allowable sweep angle of the wing, measured in degrees.
 	/// </summary>
 	public const double MaxSweepAngle = 45.0;
+
+	/// <summary>
+	/// The minimum allowable spar-to-chord offset ratio, relative to the 
+	/// chord length of the wing.
+	/// </summary>
+	public const double MinSparChordOffset = 0.1;
+	
+	/// <summary>
+	/// The maximum allowable spar-to-chord offset ratio, relative to the 
+	/// chord length of the wing.
+	/// </summary>
+	public const double MaxSparChordOffset = 0.9;
 }
