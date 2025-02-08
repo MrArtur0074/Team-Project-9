@@ -92,4 +92,9 @@ public static class WingParameters
 	/// chord length of the wing.
 	/// </summary>
 	public const double MaxSparChordOffset = 0.9;
+	
+	/// <summary>
+	/// The minimum allowable space between two ribs in millimeters.
+	/// </summary>
+	public const double MinInterRibSpace = 1.0;
 }
