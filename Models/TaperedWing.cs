@@ -19,10 +19,10 @@ public class TaperedWing : Wing, ITaperedWing
 	public int RootChord {
 		get => _rootChord;
 		set {
-			if (value is < WingParameters.MinRootChord or > WingParameters.MaxRootChord) {
+			if (value is < WingConstraints.MinRootChord or > WingConstraints.MaxRootChord) {
 				throw new ArgumentOutOfRangeException(
 					$"Root chord length must be in range " +
-					$"[{WingParameters.MinRootChord}; {WingParameters.MaxRootChord}]");
+					$"[{WingConstraints.MinRootChord}; {WingConstraints.MaxRootChord}]");
 			}
 			_rootChord = value;
 		}
@@ -35,9 +35,9 @@ public class TaperedWing : Wing, ITaperedWing
 	public double TaperRatio {
 		get => _taperRatio;
 		set {
-			if (value is < WingParameters.MinTaperRatio or > WingParameters.MaxTaperRatio) {
+			if (value is < WingConstraints.MinTaperRatio or > WingConstraints.MaxTaperRatio) {
 				throw new ArgumentOutOfRangeException(
-					$"Taper ratio must be in range [{WingParameters.MinTaperRatio}; {WingParameters.MaxTaperRatio}]");
+					$"Taper ratio must be in range [{WingConstraints.MinTaperRatio}; {WingConstraints.MaxTaperRatio}]");
 			}
 			_taperRatio = value;
 		}

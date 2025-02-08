@@ -25,10 +25,10 @@ public abstract class Wing
 	public int Span {
 		get => _span;
 		set {
-			if (value is < WingParameters.MinWingSpan or > WingParameters.MaxWingSpan) {
+			if (value is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
 				throw new ArgumentOutOfRangeException(
 					$"Span must be in range " +
-					$"[{WingParameters.MinWingSpan}; {WingParameters.MaxWingSpan}]");
+					$"[{WingConstraints.MinWingSpan}; {WingConstraints.MaxWingSpan}]");
 			}
 			_span = value;
 		}
@@ -43,10 +43,10 @@ public abstract class Wing
 	public double IncidenceAngle {
 		get => _incidenceAngle;
 		set {
-			if (value is < WingParameters.MinIncidenceAngle or > WingParameters.MaxIncidenceAngle) {
+			if (value is < WingConstraints.MinIncidenceAngle or > WingConstraints.MaxIncidenceAngle) {
 				throw new ArgumentOutOfRangeException(
 					$"Incidence angle must be in range " +
-					$"[{WingParameters.MinIncidenceAngle}; {WingParameters.MaxIncidenceAngle}]");
+					$"[{WingConstraints.MinIncidenceAngle}; {WingConstraints.MaxIncidenceAngle}]");
 			}
 			_incidenceAngle = value;
 		} 

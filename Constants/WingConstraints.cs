@@ -3,7 +3,7 @@ namespace Project_9.Models;
 /// <summary>
 /// Provides predefined wing parameter limits for aerodynamic models.
 /// </summary>
-public static class WingParameters
+public static class WingConstraints
 {
 	/// <summary>
 	/// The minimum allowable wingspan of a wing, measured in millimeters.

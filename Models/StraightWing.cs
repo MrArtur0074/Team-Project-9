@@ -18,9 +18,9 @@ public class StraightWing : Wing, ISingleChordWing
 	public int Chord {
 		get => _chord;
 		set {
-			if (value is < WingParameters.MinRootChord or > WingParameters.MaxRootChord) {
+			if (value is < WingConstraints.MinRootChord or > WingConstraints.MaxRootChord) {
 				throw new ArgumentOutOfRangeException(
-					$"Chord must be in range [{WingParameters.MinRootChord}; {WingParameters.MaxRootChord}]");
+					$"Chord must be in range [{WingConstraints.MinRootChord}; {WingConstraints.MaxRootChord}]");
 			}
 			_chord = value;
 		}

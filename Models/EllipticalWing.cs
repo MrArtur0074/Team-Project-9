@@ -20,9 +20,9 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	public int Chord {
 		get => _chord;
 		set {
-			if (value is < WingParameters.MinRootChord or > WingParameters.MaxRootChord) {
+			if (value is < WingConstraints.MinRootChord or > WingConstraints.MaxRootChord) {
 				throw new ArgumentOutOfRangeException(
-					$"Chord must be in range [{WingParameters.MinRootChord}; {WingParameters.MaxRootChord}]");
+					$"Chord must be in range [{WingConstraints.MinRootChord}; {WingConstraints.MaxRootChord}]");
 			}
 			_chord = value;
 		}
@@ -35,10 +35,10 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	public double SweepCoefficient {
 		get => _sweepCoefficient;
 		set {
-			if (value is < WingParameters.MinSweepCoefficient or > WingParameters.MaxSweepCoefficient) {
+			if (value is < WingConstraints.MinSweepCoefficient or > WingConstraints.MaxSweepCoefficient) {
 				throw new ArgumentOutOfRangeException(
 					$"Span must be in range " +
-					$"[{WingParameters.MinSweepCoefficient}; {WingParameters.MaxSweepCoefficient}]");
+					$"[{WingConstraints.MinSweepCoefficient}; {WingConstraints.MaxSweepCoefficient}]");
 			}
 			_sweepCoefficient = value;
 		} 
@@ -51,10 +51,10 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	public double TipExclusionRatio {
 		get => _tipExclusionRatio;
 		set {
-			if (value is < WingParameters.MinTipExclusionRatio or > WingParameters.MaxTipExclusionRatio) {
+			if (value is < WingConstraints.MinTipExclusionRatio or > WingConstraints.MaxTipExclusionRatio) {
 				throw new ArgumentOutOfRangeException(
 					$"Tip exclusion ratio must be in range " +
-					$"[{WingParameters.MinTipExclusionRatio}; {WingParameters.MaxTipExclusionRatio}]");
+					$"[{WingConstraints.MinTipExclusionRatio}; {WingConstraints.MaxTipExclusionRatio}]");
 			}
 			_tipExclusionRatio = value;
 		}

@@ -19,9 +19,9 @@ public class RibCollection
 	/// <param name="span">The span of the rib row.</param>
 	/// <exception cref="ArgumentException">Thrown when the span is out of the defined range.</exception>
 	public RibCollection(int span) {
-		if (span is < WingParameters.MinWingSpan or > WingParameters.MaxWingSpan) {
+		if (span is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
 			throw new ArgumentException(
-				$"Span must be between {WingParameters.MinWingSpan} and {WingParameters.MaxWingSpan} mm.");
+				$"Span must be between {WingConstraints.MinWingSpan} and {WingConstraints.MaxWingSpan} mm.");
 		}
 		_span = span;
 		_ribs.Add(0);
