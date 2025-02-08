@@ -14,7 +14,7 @@ public abstract class Wing
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
 
-	private RibRow _ribs;
+	private RibCollection _ribs;
 
 	/// <summary>
 	/// Gets or sets the span of the wing in millimeters.
@@ -73,7 +73,7 @@ public abstract class Wing
 	/// <summary>
 	/// Get the collection of ribs of the wing.
 	/// </summary>
-	public RibRow Ribs { get; private set; }
+	public RibCollection Ribs { get; private set; }
 	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
@@ -87,7 +87,7 @@ public abstract class Wing
 		IncidenceAngle = incidenceAngle;
 		RootAirfoil = rootAirfoil;
 		TipAirfoil = tipAirfoil;
-		Ribs = new RibRow(span);
+		Ribs = new RibCollection(span);
 	}
 	
 	/// <summary>

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Project_9.Models;
 
 /// <summary>
 /// Represents a collection of ribs in a wing.
 /// </summary>
-public class RibRow
+public class RibCollection
 {
 	private readonly int            _span;
 	private readonly SortedSet<int> _ribs = new();
@@ -15,11 +14,11 @@ public class RibRow
 	public IReadOnlySet<int> Ribs { get => _ribs; }
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="RibRow"/> class with a specified span.
+	/// Initializes a new instance of the <see cref="RibCollection"/> class with a specified span.
 	/// </summary>
 	/// <param name="span">The span of the rib row.</param>
 	/// <exception cref="ArgumentException">Thrown when the span is less than or equal to 0.</exception>
-	public RibRow(int span) {
+	public RibCollection(int span) {
 		if (span < 0) {
 			throw new ArgumentException("Span must be greater than 0.");
 		}
