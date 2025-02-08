@@ -17,10 +17,11 @@ public class RibCollection
 	/// Initializes a new instance of the <see cref="RibCollection"/> class with a specified span.
 	/// </summary>
 	/// <param name="span">The span of the rib row.</param>
-	/// <exception cref="ArgumentException">Thrown when the span is less than or equal to 0.</exception>
+	/// <exception cref="ArgumentException">Thrown when the span is out of the defined range.</exception>
 	public RibCollection(int span) {
-		if (span < 0) {
-			throw new ArgumentException("Span must be greater than 0.");
+		if (span is < WingParameters.MinWingSpan or > WingParameters.MaxWingSpan) {
+			throw new ArgumentException(
+				$"Span must be between {WingParameters.MinWingSpan} and {WingParameters.MaxWingSpan} mm.");
 		}
 		_span = span;
 		_ribs.Add(0);
