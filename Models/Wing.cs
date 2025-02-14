@@ -1,0 +1,104 @@
+using System;
+
+namespace Project_9.Models;
+
+/// <summary>
+/// Represents a wing with properties and methods for defining its
+/// geometric characteristics and calculating aerodynamic parameters
+/// </summary>
+public abstract class Wing
+{
+	private int   _span;
+	private double _incidenceAngle;
+
+	private Airfoil _rootAirfoil;
+	private Airfoil _tipAirfoil;
+
+	private RibCollection _ribs;
+
+	/// <summary>
+	/// Gets or sets the span of the wing in millimeters.
+	/// </summary>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the span is out of the defined range.
+	/// </exception>
+	public int Span {
+		get => _span;
+		set {
+			if (value is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
+				throw new ArgumentOutOfRangeException(
+					$"Span must be in range " +
+					$"[{WingConstraints.MinWingSpan}; {WingConstraints.MaxWingSpan}]");
+			}
+			_span = value;
+		}
+	}
+	
+	/// <summary>
+	/// Gets or sets the incidence angle of the wing in degrees.
+	/// </summary>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the incidence angle is out of the defined range.
+	/// </exception>
+	public double IncidenceAngle {
+		get => _incidenceAngle;
+		set {
+			if (value is < WingConstraints.MinIncidenceAngle or > WingConstraints.MaxIncidenceAngle) {
+				throw new ArgumentOutOfRangeException(
+					$"Incidence angle must be in range " +
+					$"[{WingConstraints.MinIncidenceAngle}; {WingConstraints.MaxIncidenceAngle}]");
+			}
+			_incidenceAngle = value;
+		} 
+	}
+
+	/// <summary>
+	/// Gets or sets the root airfoil of the wing.
+	/// </summary>
+	/// <exception cref="ArgumentNullException">Thrown when the root airfoil is set to null.</exception>
+	public Airfoil RootAirfoil {
+		get => _rootAirfoil;
+		set => _rootAirfoil = value ?? throw new ArgumentNullException("Root airfoil cannot be null!");
+	}
+	
+	/// <summary>
+	/// Gets or sets the tip airfoil of the wing.
+	/// </summary>
+	/// <exception cref="ArgumentNullException">Thrown when the tip airfoil is set to null.</exception>
+	public Airfoil TipAirfoil {
+		get => _tipAirfoil;
+		set => _tipAirfoil = value ?? throw new ArgumentNullException("Tip airfoil cannot be null!");
+	}
+	
+	/// <summary>
+	/// Get the collection of ribs of the wing.
+	/// </summary>
+	public RibCollection Ribs { get; private set; }
+	
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
+	/// </summary>
+	/// <param name="span">The span of the wing in millimeters.</param>
+	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
+	/// <param name="rootAirfoil">The root airfoil of the wing.</param>
+	/// <param name="tipAirfoil">The tip airfoil of the wing.</param>
+	protected Wing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+		Span = span;
+		IncidenceAngle = incidenceAngle;
+		RootAirfoil = rootAirfoil;
+		TipAirfoil = tipAirfoil;
+		Ribs = new RibCollection(span);
+	}
+	
+	/// <summary>
+	/// Calculates the area of the wing.
+	/// </summary>
+	/// <returns>The area of the wing in square millimeters.</returns>
+	public abstract double GetArea();
+	
+	/// <summary>
+	/// Calculates the aspect ratio of the wing.
+	/// </summary>
+	/// <returns>The aspect ratio of the wing.</returns>
+	public abstract double GetAspectRatio();
+}
