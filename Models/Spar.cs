@@ -5,13 +5,11 @@ namespace Project_9.Models;
 /// <summary>
 /// Represents a spar in an aircraft wing, defining its geometric characteristics.
 /// </summary>
-public class Spar<T> where T : SparProfile
+public abstract class Spar
 {
 	private int _ribCount = 2;
 	private int _startRib = 0;
 	private int _endRib   = 1;
-	private T   _rootProfile;
-	private T   _tipProfile;
 
 	private double _startChordOffset = 0.5;
 	private double _endChordOffset   = 0.5;
@@ -25,24 +23,17 @@ public class Spar<T> where T : SparProfile
 	/// <param name="startChordOffset">The offset from the leading edge of the wing at the start rib.</param>
 	/// <param name="endChordOffset">The offset from the leading edge of the wing at the end rib.</param>
 	/// <param name="alignment">The alignment type of the spar.</param>
-	/// <param name="profileAlignment">The alignment type of the spar profile.</param>
-	/// <param name="rootProfile">The spar profile of the root rib.</param>
-	/// <param name="tipProfile">The spar profile of the tip rib.</param>
 	/// <exception cref="ArgumentException">Thrown when the rib count is less than 2.</exception>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="profile"/> is null.</exception>
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the start or end ribs, or the start or end chord offsets, are out of range.
 	/// </exception>
-	public Spar(
+	protected Spar(
 		int ribCount,
 		int startRib,
 		int endRib,
 		double startChordOffset,
 		double endChordOffset,
-		AlignmentType alignment,
-		ProfileAlignmentType profileAlignment,
-		T rootProfile,
-		T tipProfile
+		AlignmentType alignment
 	) {
 		RibCount = ribCount;
 		StartRib = startRib;
@@ -50,9 +41,6 @@ public class Spar<T> where T : SparProfile
 		StartChordOffset = startChordOffset;
 		EndChordOffset = endChordOffset;
 		Alignment = alignment;
-		ProfileAlignment = profileAlignment;
-		RootProfile = rootProfile;
-		TipProfile = tipProfile;
 	}
 
 	/// <summary>
@@ -62,16 +50,6 @@ public class Spar<T> where T : SparProfile
 	{
 		Linear, // Straight line offset between ribs.
 		Interpolated // Follows local chord interpolation.
-	}
-
-	/// <summary>
-	/// Defines the alignment types of a spar profile.
-	/// </summary>
-	public enum ProfileAlignmentType
-	{
-		Upper,
-		Lower,
-		Custom
 	}
 
 	/// <summary>
@@ -164,40 +142,14 @@ public class Spar<T> where T : SparProfile
 	/// </summary>
 	public AlignmentType Alignment { get; set; }
 
-	/// <summary>
-	/// Gets or sets the alignment type of the spar profile.
-	/// </summary>
-	public ProfileAlignmentType ProfileAlignment { get; set; }
-
-	/// <summary>
-	/// Gets or sets the spar profile of the root rib.
-	/// </summary>
-	/// <exception cref="ArgumentNullException">Thrown when the profile is null.</exception>
-	public T RootProfile {
-		get => _rootProfile;
-		set => _rootProfile = value ?? throw new ArgumentNullException($"Root profile must be specified");
-	}
-
-	/// <summary>
-	/// Gets or sets the spar profile of the tip rib.
-	/// </summary>
-	/// <exception cref="ArgumentNullException">Thrown when the profile is null.</exception>
-	public T TipProfile {
-		get => _tipProfile;
-		set => _tipProfile = value ?? throw new ArgumentNullException($"Root profile must be specified");
-	}
-
 	/// <inheritdoc />
 	public override string ToString() {
 		return $"Spar: " +
 		       $"RibCount={RibCount}, " +
 		       $"StartRib={StartRib}, " +
 		       $"EndRib={EndRib}, " +
-		       $"RootProfile={RootProfile}, " +
-		       $"TipProfile={TipProfile}, " +
 		       $"StartChordOffset={StartChordOffset}, " +
 		       $"EndChordOffset={EndChordOffset}, " +
-		       $"Alignment={Alignment}, " +
-		       $"ProfileAlignment={ProfileAlignment}";
+		       $"Alignment={Alignment}";
 	}
 }
