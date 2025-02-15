@@ -16,8 +16,6 @@ public abstract class Wing
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
 
-	private RibCollection _ribs;
-
 	/// <summary>
 	/// Gets or sets the name of the wing.
 	/// </summary>
