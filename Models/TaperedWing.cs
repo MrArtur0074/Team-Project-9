@@ -50,13 +50,14 @@ public class TaperedWing : Wing, ITaperedWing
 	/// <param name="rootChord">The root chord length of the wing.</param>
 	/// <param name="taperRatio">The taper ratio of the wing.</param>
 	public TaperedWing(
+		string name,
 		int span, 
 		double incidenceAngle, 
 		Airfoil rootAirfoil, 
 		Airfoil tipAirfoil, 
 		int rootChord, 
 		double taperRatio
-	) : base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
+	) : base(name, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		RootChord = rootChord;
 		TaperRatio = taperRatio;
 	}

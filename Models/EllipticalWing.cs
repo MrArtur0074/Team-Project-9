@@ -67,9 +67,9 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	/// <param name="chord">The length of the wing root chord.</param>>
 	/// <param name="sweep">The sweep coefficient, defining the curvature of the leading edge.</param>
 	/// <param name="tipExclusion">The ratio of the tip exclusion, limiting the rib generation area.</param>
-	public EllipticalWing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
+	public EllipticalWing(string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
 		int chord, double sweep, int tipExclusion) 
-		: base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
+		: base(name, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		Chord = chord;
 		SweepCoefficient = sweep;
 		TipExclusionRatio = tipExclusion;
