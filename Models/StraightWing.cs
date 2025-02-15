@@ -10,7 +10,7 @@ namespace Project_9.Models;
 public class StraightWing : Wing, ISingleChordWing
 {
 	private int _chord;
-	
+
 	/// <inheritdoc />
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the chord length is out of the defined range
@@ -31,8 +31,14 @@ public class StraightWing : Wing, ISingleChordWing
 	/// Initializes a new instance of the <see cref="StraightWing"/> class with the specified parameters.
 	/// </summary>
 	/// <param name="chord">The length of the wing chord.</param>
-	public StraightWing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, int chord) 
-		: base(span, incidenceAngle, rootAirfoil, tipAirfoil) {
+	public StraightWing(
+		string name,
+		int span,
+		double incidenceAngle,
+		Airfoil rootAirfoil,
+		Airfoil tipAirfoil,
+		int chord
+	) : base(name, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		Chord = chord;
 	}
 
@@ -41,6 +47,6 @@ public class StraightWing : Wing, ISingleChordWing
 	}
 
 	public override double GetAspectRatio() {
-		return (double) Span / _chord;
+		return (double)Span / _chord;
 	}
 }
