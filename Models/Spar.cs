@@ -61,7 +61,7 @@ public class Spar<T> where T : SparProfile
 	public enum AlignmentType
 	{
 		Linear, // Straight line offset between ribs.
-		Interpolated, // Follows local chord interpolation.
+		Interpolated // Follows local chord interpolation.
 	}
 
 	/// <summary>
@@ -71,7 +71,7 @@ public class Spar<T> where T : SparProfile
 	{
 		Upper,
 		Lower,
-		Custom,
+		Custom
 	}
 
 	/// <summary>

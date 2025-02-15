@@ -9,15 +9,14 @@ namespace Project_9.Models;
 public abstract class Wing
 {
 	private string _name;
-    
-	private int   _span;
+	private int    _span;
 	private double _incidenceAngle;
 
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
 
 	private RibCollection _ribs;
-	
+
 	/// <summary>
 	/// Gets or sets the name of the wing.
 	/// </summary>
@@ -44,7 +43,7 @@ public abstract class Wing
 			_span = value;
 		}
 	}
-	
+
 	/// <summary>
 	/// Gets or sets the incidence angle of the wing in degrees.
 	/// </summary>
@@ -60,7 +59,7 @@ public abstract class Wing
 					$"[{WingConstraints.MinIncidenceAngle}; {WingConstraints.MaxIncidenceAngle}]");
 			}
 			_incidenceAngle = value;
-		} 
+		}
 	}
 
 	/// <summary>
@@ -71,7 +70,7 @@ public abstract class Wing
 		get => _rootAirfoil;
 		set => _rootAirfoil = value ?? throw new ArgumentNullException("Root airfoil cannot be null!");
 	}
-	
+
 	/// <summary>
 	/// Gets or sets the tip airfoil of the wing.
 	/// </summary>
@@ -80,7 +79,7 @@ public abstract class Wing
 		get => _tipAirfoil;
 		set => _tipAirfoil = value ?? throw new ArgumentNullException("Tip airfoil cannot be null!");
 	}
-	
+
 	/// <summary>
 	/// Get the collection of ribs of the wing.
 	/// </summary>
@@ -100,7 +99,7 @@ public abstract class Wing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the span or incidence angle are out of range.
 	/// </exception>
-	protected Wing( string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+	protected Wing(string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
 		Name = name;
 		Span = span;
 		IncidenceAngle = incidenceAngle;
@@ -108,13 +107,13 @@ public abstract class Wing
 		TipAirfoil = tipAirfoil;
 		Ribs = new RibCollection(span);
 	}
-	
+
 	/// <summary>
 	/// Calculates the area of the wing.
 	/// </summary>
 	/// <returns>The area of the wing in square millimeters.</returns>
 	public abstract double GetArea();
-	
+
 	/// <summary>
 	/// Calculates the aspect ratio of the wing.
 	/// </summary>

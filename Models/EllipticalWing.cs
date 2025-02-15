@@ -12,7 +12,7 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	private int    _chord;
 	private double _sweepCoefficient;
 	private double _tipExclusionRatio;
-	
+
 	/// <inheritdoc />
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the chord length is out of the defined range
@@ -41,7 +41,7 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 					$"[{WingConstraints.MinSweepCoefficient}; {WingConstraints.MaxSweepCoefficient}]");
 			}
 			_sweepCoefficient = value;
-		} 
+		}
 	}
 
 	/// <inheritdoc />
@@ -59,7 +59,7 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 			_tipExclusionRatio = value;
 		}
 	}
-	
+
 	/// <inheritdoc />
 	/// <summary>
 	/// Initializes a new instance of the <see cref="EllipticalWing"/> class with the specified parameters.
@@ -67,8 +67,10 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	/// <param name="chord">The length of the wing root chord.</param>>
 	/// <param name="sweep">The sweep coefficient, defining the curvature of the leading edge.</param>
 	/// <param name="tipExclusion">The ratio of the tip exclusion, limiting the rib generation area.</param>
-	public EllipticalWing(string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil, 
-		int chord, double sweep, int tipExclusion) 
+	public EllipticalWing(
+		string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil,
+		int chord, double sweep, int tipExclusion
+	)
 		: base(name, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		Chord = chord;
 		SweepCoefficient = sweep;
@@ -76,10 +78,10 @@ public class EllipticalWing : Wing, ISingleChordWing, IEllipticalWing
 	}
 
 	public override double GetArea() {
-		return Double.Pi * Chord * Span / 4.0;
+		return double.Pi * Chord * Span / 4.0;
 	}
 
 	public override double GetAspectRatio() {
-		return Span * 4.0 / (Double.Pi * Chord);
+		return Span * 4.0 / (double.Pi * Chord);
 	}
 }

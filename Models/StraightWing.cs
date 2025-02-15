@@ -10,7 +10,7 @@ namespace Project_9.Models;
 public class StraightWing : Wing, ISingleChordWing
 {
 	private int _chord;
-	
+
 	/// <inheritdoc />
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the chord length is out of the defined range

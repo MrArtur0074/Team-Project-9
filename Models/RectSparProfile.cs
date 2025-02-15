@@ -14,6 +14,6 @@ public class RectSparProfile : SparProfile
 	public RectSparProfile(Rect rectangle) {
 		Rectangle = rectangle;
 	}
-	
+
 	public Rect Rectangle { get; set; }
 }

@@ -5,5 +5,4 @@ namespace Project_9.Models;
 /// </summary>
 public abstract class SparProfile
 {
-	
 }

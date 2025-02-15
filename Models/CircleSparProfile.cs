@@ -21,7 +21,7 @@ public class CircleSparProfile : SparProfile
 	/// Gets or sets the position of the spar.
 	/// </summary>
 	public Point Position { get; set; }
-	
+
 	/// <summary>
 	/// Gets of sets the radius.
 	/// </summary>

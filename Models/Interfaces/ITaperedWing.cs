@@ -9,7 +9,7 @@ public interface ITaperedWing
 	/// Gets or sets the root chord length of the tapered wing in millimeters.
 	/// </summary>
 	public int RootChord { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the taper ratio of the wing, which is
 	/// the ratio of the tip chord length to the root chord length.

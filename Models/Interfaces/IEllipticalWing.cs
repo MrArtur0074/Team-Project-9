@@ -9,7 +9,7 @@ public interface IEllipticalWing
 	/// Gets or sets the sweep coefficient. Defines the curvature of the elliptical wing.
 	/// </summary>
 	public double SweepCoefficient { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the ratio relative to the wingspan
 	/// to exclude at the tip of the wing in millimeters.
