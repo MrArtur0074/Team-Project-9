@@ -8,6 +8,8 @@ namespace Project_9.Models;
 /// </summary>
 public abstract class Wing
 {
+	private string _name;
+    
 	private int   _span;
 	private double _incidenceAngle;
 
@@ -15,6 +17,15 @@ public abstract class Wing
 	private Airfoil _tipAirfoil;
 
 	private RibCollection _ribs;
+	
+	/// <summary>
+	/// Gets or sets the name of the wing.
+	/// </summary>
+	/// <exception cref="ArgumentNullException">Thrown when the name is set to null.</exception>
+	public string Name {
+		get => _name;
+		set => _name = value ?? throw new ArgumentNullException($"Name cannot be null!");
+	}
 
 	/// <summary>
 	/// Gets or sets the span of the wing in millimeters.
@@ -74,15 +85,23 @@ public abstract class Wing
 	/// Get the collection of ribs of the wing.
 	/// </summary>
 	public RibCollection Ribs { get; private set; }
-	
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
 	/// </summary>
+	/// <param name="name">The name of the wing.</param>>
 	/// <param name="span">The span of the wing in millimeters.</param>
 	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
 	/// <param name="rootAirfoil">The root airfoil of the wing.</param>
 	/// <param name="tipAirfoil">The tip airfoil of the wing.</param>
-	protected Wing(int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+	/// <exception cref="ArgumentNullException">
+	/// Thrown when the name or root or tip airfoils are null.
+	/// </exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the span or incidence angle are out of range.
+	/// </exception>
+	protected Wing( string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+		Name = name;
 		Span = span;
 		IncidenceAngle = incidenceAngle;
 		RootAirfoil = rootAirfoil;
