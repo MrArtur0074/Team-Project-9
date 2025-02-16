@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Project_9.Models;
 
@@ -14,8 +15,6 @@ public abstract class Wing
 
 	private Airfoil _rootAirfoil;
 	private Airfoil _tipAirfoil;
-
-	private RibCollection _ribs;
 
 	/// <summary>
 	/// Gets or sets the name of the wing.
@@ -84,6 +83,11 @@ public abstract class Wing
 	/// Get the collection of ribs of the wing.
 	/// </summary>
 	public RibCollection Ribs { get; private set; }
+	
+	/// <summary>
+	/// Gets the collection of spars of the wing.
+	/// </summary>
+	public List<Spar> Spars { get; private set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
@@ -106,6 +110,7 @@ public abstract class Wing
 		RootAirfoil = rootAirfoil;
 		TipAirfoil = tipAirfoil;
 		Ribs = new RibCollection(span);
+		Spars = new List<Spar>();
 	}
 
 	/// <summary>
