@@ -1,4 +1,4 @@
-using Avalonia;
+using Aspose.CAD.Primitives;
 
 namespace Project_9.Models;
 
@@ -15,16 +15,16 @@ public class Airfoil
 	/// <summary>
 	/// Gets or sets the points that define the shape of the airfoil.
 	/// </summary>
-	public Point[] Points { get; set; }
+	public (Point2D point, bool isUpper)[] Points { get; set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Airfoil"/> class with a specified name and set of points.
 	/// </summary>
 	/// <param name="name">The name of the airfoil.</param>
 	/// <param name="points">
-	/// An array of <see cref="Point2"/> representing the points defining the shape of the airfoil.
+	/// The array of <see cref="Point2"/> representing the points defining the shape of the airfoil.
 	/// </param>
-	public Airfoil(string name, Point[] points) {
+	public Airfoil(string name, (Point2D, bool)[] points) {
 		Name = name;
 		Points = points;
 	}
