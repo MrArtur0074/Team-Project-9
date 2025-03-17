@@ -7,9 +7,9 @@ using Project_9.Settings;
 
 namespace Project_9.Services;
 
-public class AirfoilInterpolationService
+public static class AirfoilInterpolationService
 {
-	private Airfoil UnifyAirfoil(Airfoil airfoil) {
+	private static Airfoil UnifyAirfoil(Airfoil airfoil) {
 		var upperSurface = airfoil.Points.Where(point => point.Item2).Select(point => point.Item1).ToArray();
 		var lowerSurface = airfoil.Points.Where(point => !point.Item2).Select(point => point.Item1).ToArray();
 		
@@ -22,7 +22,7 @@ public class AirfoilInterpolationService
 		return new Airfoil(name, points.ToArray());
 	}
 	
-	private (Point, bool)[] UnifySurface(Point[] surfacePoints, bool isUpper, int pointsCount) {
+	private static (Point, bool)[] UnifySurface(Point[] surfacePoints, bool isUpper, int pointsCount) {
 		var points = new (Point, bool)[pointsCount];
 
 		double xMin = surfacePoints.Min(point => point.X);
@@ -38,7 +38,7 @@ public class AirfoilInterpolationService
 		return points;
 	}
 
-	private double InterpolateY(Point[] points, double x) {
+	private static double InterpolateY(Point[] points, double x) {
 		for (int i = 0; i < points.Length - 1; i++) {
 			if (points[i].X <= x && x <= points[i + 1].X) {
 				double x1 = points[i].X, y1 = points[i].Y;
@@ -49,7 +49,7 @@ public class AirfoilInterpolationService
 		return 0.0;
 	}
 
-	private Airfoil InterpolateAirfoil(Airfoil rootAirfoil, Airfoil tipAirfoil, double ratio) {
+	private static Airfoil InterpolateAirfoil(Airfoil rootAirfoil, Airfoil tipAirfoil, double ratio) {
 		var rootPoints = rootAirfoil.Points;
 		var tipPoints = tipAirfoil.Points;
 
@@ -67,7 +67,7 @@ public class AirfoilInterpolationService
 		return new Airfoil(name, points);
 	}
 	
-	public Airfoil[] Interpolate(Airfoil rootAirfoil, Airfoil tipAirfoil, int span, RibCollection ribCollection) {
+	public static Airfoil[] Interpolate(Airfoil rootAirfoil, Airfoil tipAirfoil, int span, RibCollection ribCollection) {
 		var ribs = ribCollection.Ribs;
 		int ribsCount = ribs.Count;
 
