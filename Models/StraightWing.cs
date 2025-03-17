@@ -10,15 +10,13 @@ public class StraightWing : Wing
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StraightWing"/> class with the specified parameters.
 	/// </summary>
-	/// <param name="chord">The length of the wing chord.</param>
 	public StraightWing(
 		string name,
 		int rootChord,
 		int span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
-		Airfoil tipAirfoil,
-		int chord
+		Airfoil tipAirfoil
 	) : base(name, rootChord, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 	}
 
