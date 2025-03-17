@@ -10,6 +10,7 @@ namespace Project_9.Models;
 public abstract class Wing
 {
 	private string _name;
+	private int    _rootChord;
 	private int    _span;
 	private double _incidenceAngle;
 
@@ -23,6 +24,24 @@ public abstract class Wing
 	public string Name {
 		get => _name;
 		set => _name = value ?? throw new ArgumentNullException($"Name cannot be null!");
+	}
+
+	/// <summary>
+	/// Gets or sets the root chord length of the wing.
+	/// </summary>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the root chord length is out of the defined range.
+	/// </exception>
+	public int RootChord {
+		get => _rootChord;
+		set {
+			if (value is < WingConstraints.MinRootChord or > WingConstraints.MaxRootChord) {
+				throw new ArgumentOutOfRangeException(
+					$"Root chord length must be in range " +
+					$"[{WingConstraints.MinRootChord}; {WingConstraints.MaxRootChord}]");
+			}
+			_rootChord = value;
+		}
 	}
 
 	/// <summary>
@@ -67,7 +86,7 @@ public abstract class Wing
 	/// <exception cref="ArgumentNullException">Thrown when the root airfoil is set to null.</exception>
 	public Airfoil RootAirfoil {
 		get => _rootAirfoil;
-		set => _rootAirfoil = value ?? throw new ArgumentNullException("Root airfoil cannot be null!");
+		set => _rootAirfoil = value ?? throw new ArgumentNullException($"Root airfoil cannot be null!");
 	}
 
 	/// <summary>
@@ -76,14 +95,14 @@ public abstract class Wing
 	/// <exception cref="ArgumentNullException">Thrown when the tip airfoil is set to null.</exception>
 	public Airfoil TipAirfoil {
 		get => _tipAirfoil;
-		set => _tipAirfoil = value ?? throw new ArgumentNullException("Tip airfoil cannot be null!");
+		set => _tipAirfoil = value ?? throw new ArgumentNullException($"Tip airfoil cannot be null!");
 	}
 
 	/// <summary>
 	/// Get the collection of ribs of the wing.
 	/// </summary>
 	public RibCollection Ribs { get; private set; }
-	
+
 	/// <summary>
 	/// Gets the collection of spars of the wing.
 	/// </summary>
@@ -93,6 +112,7 @@ public abstract class Wing
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
 	/// </summary>
 	/// <param name="name">The name of the wing.</param>>
+	/// <param name="rootChord">The root chord length of the wing in millimeters.</param>
 	/// <param name="span">The span of the wing in millimeters.</param>
 	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
 	/// <param name="rootAirfoil">The root airfoil of the wing.</param>
@@ -103,8 +123,16 @@ public abstract class Wing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the span or incidence angle are out of range.
 	/// </exception>
-	protected Wing(string name, int span, double incidenceAngle, Airfoil rootAirfoil, Airfoil tipAirfoil) {
+	protected Wing(
+		string name,
+		int rootChord,
+		int span,
+		double incidenceAngle,
+		Airfoil rootAirfoil,
+		Airfoil tipAirfoil
+	) {
 		Name = name;
+		RootChord = rootChord;
 		Span = span;
 		IncidenceAngle = incidenceAngle;
 		RootAirfoil = rootAirfoil;
