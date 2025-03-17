@@ -52,7 +52,7 @@ public static class AirfoilsInterpolationService
 		var rootPoints = rootAirfoil.Points;
 		var tipPoints = tipAirfoil.Points;
 
-		var name = $"{rootAirfoil}-{tipAirfoil}-{ratio}";
+		var name = $"{rootAirfoil.Name}-{tipAirfoil.Name}-{ratio}";
 		var points = new (Point2D, bool)[rootPoints.Length];
 
 		for (int i = 0; i < points.Length; ++i) {
@@ -74,9 +74,12 @@ public static class AirfoilsInterpolationService
 
 		var airfoils = new Airfoil[ribsCount];
 
+		var unifiedRootAirfoil = UnifyAirfoil(rootAirfoil);
+		var unifiedTipAirfoil = UnifyAirfoil(tipAirfoil);
+
 		for (int i = 0; i < ribsCount; ++i) {
 			var ratio = ribs[i] / span;
-			airfoils[i] = InterpolateAirfoil(rootAirfoil, tipAirfoil, ratio);
+			airfoils[i] = InterpolateAirfoil(unifiedRootAirfoil, unifiedTipAirfoil, ratio);
 		}
 
 		return airfoils;
