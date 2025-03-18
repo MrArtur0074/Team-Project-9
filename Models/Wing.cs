@@ -107,6 +107,33 @@ public abstract class Wing
 	/// Gets the collection of spars of the wing.
 	/// </summary>
 	public List<Spar> Spars { get; private set; }
+	
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
+	/// </summary>
+	/// <param name="name">The name of the wing.</param>>
+	/// <param name="rootChord">The root chord length of the wing in millimeters.</param>
+	/// <param name="span">The span of the wing in millimeters.</param>
+	/// <param name="incidenceAngle">The incidence angle of the wing in degrees.</param>
+	/// <exception cref="ArgumentNullException">
+	/// Thrown when the name or root or tip airfoils are null.
+	/// </exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Thrown when the span or incidence angle are out of range.
+	/// </exception>
+	protected Wing(
+		string name,
+		int rootChord,
+		int span,
+		double incidenceAngle
+	) {
+		Name = name;
+		RootChord = rootChord;
+		Span = span;
+		IncidenceAngle = incidenceAngle;
+		Ribs = new RibCollection(span);
+		Spars = new List<Spar>();
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
@@ -130,15 +157,9 @@ public abstract class Wing
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil
-	) {
-		Name = name;
-		RootChord = rootChord;
-		Span = span;
-		IncidenceAngle = incidenceAngle;
+	) : this(name, rootChord, span, incidenceAngle) {
 		RootAirfoil = rootAirfoil;
 		TipAirfoil = tipAirfoil;
-		Ribs = new RibCollection(span);
-		Spars = new List<Spar>();
 	}
 
 	/// <summary>

@@ -14,6 +14,18 @@ public class StraightWing : Wing
 		string name,
 		int rootChord,
 		int span,
+		double incidenceAngle
+	) : base(name, rootChord, span, incidenceAngle) {
+	}
+	
+	/// <inheritdoc />
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StraightWing"/> class with the specified parameters.
+	/// </summary>
+	public StraightWing(
+		string name,
+		int rootChord,
+		int span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil
