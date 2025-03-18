@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Project_9.ViewModels"
+             x:Class="Project_9.Views.DwgExportView"
+             x:DataType="vm:DwgExportViewModel">
+
+    <StackPanel Margin="10">
+        <Button Content="Export DWG" Command="{Binding ExportCommand}" Margin="5" />
+        <TextBlock Text="Export your wing design to a DWG file." Margin="5" />
+    </StackPanel>
+</UserControl>
