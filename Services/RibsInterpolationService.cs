@@ -32,8 +32,8 @@ public class RibsInterpolationService
 			: AirfoilsInterpolationService.Interpolate(wing.RootAirfoil, wing.TipAirfoil, wing.Span, ribs);
 
 		List<CadBlockEntity> ribEntities = [];
-		foreach (var airfoil in interpolatedAirfoils) {
-			ribEntities.Add(CreateRibGeometry(airfoil));
+		for (int i = 0; i < interpolatedAirfoils.Length; ++i) {
+			ribEntities.Add(CreateRibGeometry(interpolatedAirfoils[i], i));
 		}
 
 		foreach (Spar spar in wing.Spars) {
@@ -43,7 +43,7 @@ public class RibsInterpolationService
 		return ribEntities.ToArray();
 	}
 
-	private CadBlockEntity CreateRibGeometry(Airfoil airfoil) {
+	private CadBlockEntity CreateRibGeometry(Airfoil airfoil, int id) {
 		List<Cad3DPoint> transformedPoints = airfoil.Points
 			.Select(p => TransformPoint(p.point))
 			.Select(p => new Cad3DPoint(p.X, p.Y))
@@ -54,7 +54,9 @@ public class RibsInterpolationService
 			Closed = 1
 		};
 
-		var ribGeometry = new CadBlockEntity();
+		var ribGeometry = new CadBlockEntity() {
+			Name = airfoil.Name + id
+		};
 		ribGeometry.AddEntity(ribSpline);
 
 		return ribGeometry;
