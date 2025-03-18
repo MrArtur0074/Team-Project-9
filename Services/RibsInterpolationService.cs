@@ -7,14 +7,14 @@ using Project_9.Models;
 
 namespace Project_9.Services;
 
-public static class RibInterpolationService
+public class RibsInterpolationService
 {
-	private static int           _rootChord;
-	private static double        _incidenceAngleSin;
-	private static double        _incidenceAngleCos;
-	private static RibCollection _ribs;
+	private int           _rootChord;
+	private double        _incidenceAngleSin;
+	private double        _incidenceAngleCos;
+	private RibCollection _ribs;
 
-	public static CadBlockEntity[] Interpolate(Wing wing, RibCollection ribs) {
+	public CadBlockEntity[] Interpolate(Wing wing, RibCollection ribs) {
 		if (wing is null || ribs is null || ribs.Ribs is null) {
 			throw new ArgumentException("Invalid input data.");
 		}
@@ -41,7 +41,7 @@ public static class RibInterpolationService
 		return ribEntities.ToArray();
 	}
 
-	private static CadBlockEntity CreateRibGeometry(Airfoil airfoil) {
+	private CadBlockEntity CreateRibGeometry(Airfoil airfoil) {
 		List<Cad3DPoint> transformedPoints = airfoil.Points
 			.Select(p => TransformPoint(p.point))
 			.Select(p => new Cad3DPoint(p.X, p.Y))
@@ -58,7 +58,7 @@ public static class RibInterpolationService
 		return ribGeometry;
 	}
 
-	private static Point2D TransformPoint(Point2D point) {
+	private Point2D TransformPoint(Point2D point) {
 		double x = point.X * _rootChord;
 		double y = point.Y * _rootChord;
 		double rotatedX = x * _incidenceAngleCos - y * _incidenceAngleSin;
@@ -66,7 +66,7 @@ public static class RibInterpolationService
 		return new Point2D(rotatedX, rotatedY);
 	}
 
-	private static void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar, Wing wing) {
+	private void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar, Wing wing) {
 		for (int i = spar.StartRib; i <= spar.EndRib; ++i) {
 			var rib = ribEntities[i];
 			double chordOffset = CalculateChordOffset(spar, i);
@@ -105,7 +105,7 @@ public static class RibInterpolationService
 		rib.AddEntity(circle);
 	}
 
-	private static double CalculateChordOffset(Spar spar, int ribIndex) {
+	private double CalculateChordOffset(Spar spar, int ribIndex) {
 		switch (spar.Alignment) {
 			case Spar.AlignmentType.Linear:
 				double x = (_ribs.Ribs[ribIndex] - _ribs.Ribs[spar.StartRib]) /
