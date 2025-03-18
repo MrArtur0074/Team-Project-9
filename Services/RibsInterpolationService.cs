@@ -14,10 +14,12 @@ public class RibsInterpolationService
 	private double        _incidenceAngleCos;
 	private RibCollection _ribs;
 
-	public CadBlockEntity[] Interpolate(Wing wing, RibCollection ribs) {
-		if (wing is null || ribs is null || ribs.Ribs is null) {
+	public CadBlockEntity[] Interpolate(Wing wing) {
+		if (wing is null || wing.Ribs is null) {
 			throw new ArgumentException("Invalid input data.");
 		}
+
+		var ribs = wing.Ribs;
 
 		_rootChord = wing.RootChord;
 		double radians = double.DegreesToRadians(wing.IncidenceAngle);
