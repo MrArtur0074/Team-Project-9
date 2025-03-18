@@ -15,19 +15,14 @@ public class MainViewModel : ViewModelBase
 	private readonly List<Func<ViewModelBase>> _steps;
 	private readonly Wing                      _wing            = new StraightWing("New Wing", 200, 1000, 0.0);
 	private readonly UndoRedoService           _undoRedoService = new();
-	private readonly TopLevel                  _topLevel;
-	private readonly IDwgExportService         _dwgExportService;
 
 	public MainViewModel(TopLevel topLevel, IDwgExportService dwgExportService) {
-		_topLevel = topLevel;
-		_dwgExportService = dwgExportService;
-
 		_steps = [
 			() => new WingGeometryViewModel(_wing, _undoRedoService),
-			() => new AirfoilConfigViewModel(_wing, _undoRedoService, _topLevel),
+			() => new AirfoilConfigViewModel(_wing, _undoRedoService, topLevel),
 			() => new RibPlacementViewModel(_wing, _undoRedoService),
 			() => new SparConfigViewModel(_wing, _undoRedoService),
-			() => new DwgExportViewModel(_wing, dwgExportService, _topLevel)
+			() => new DwgExportViewModel(_wing, dwgExportService, topLevel)
 		];
 
 		CurrentViewModel = _steps[0]();
@@ -38,18 +33,23 @@ public class MainViewModel : ViewModelBase
 		private set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
 	}
 
-	public void NavigateNext() {
-		if (_currentStepIndex < _steps.Count - 1) {
-			_currentStepIndex++;
-			CurrentViewModel = _steps[_currentStepIndex]();
-		}
+	public ICommand NavigateNext {
+		get => ReactiveCommand.Create(() => {
+			if (_currentStepIndex < _steps.Count - 1) {
+				_currentStepIndex++;
+				CurrentViewModel = _steps[_currentStepIndex]();
+			}
+		});
 	}
 
-	public void NavigatePrevious() {
-		if (_currentStepIndex > 0) {
-			_currentStepIndex--;
-			CurrentViewModel = _steps[_currentStepIndex]();
-		}
+	public ICommand NavigatePrevious {
+		get => ReactiveCommand.Create(() => {
+			if (_currentStepIndex > 0) {
+				_currentStepIndex--;
+				CurrentViewModel = _steps[_currentStepIndex]();
+			}
+		});
+
 	}
 
 	public ICommand UndoCommand => ReactiveCommand.Create(_undoRedoService.Undo);
