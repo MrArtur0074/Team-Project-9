@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Project_9.Models;
 using Project_9.Services;
 using ReactiveUI;
@@ -30,28 +31,46 @@ public class MainViewModel : ViewModelBase
 
 	public ViewModelBase CurrentViewModel {
 		get => _currentViewModel;
-		private set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
+		private set => RaiseAndSetIfChanged(ref _currentViewModel, value);
 	}
 
 	public ICommand NavigateNext {
-		get => ReactiveCommand.Create(() => {
-			if (_currentStepIndex < _steps.Count - 1) {
-				_currentStepIndex++;
-				CurrentViewModel = _steps[_currentStepIndex]();
-			}
-		});
+		get => ReactiveCommand.Create(() =>
+		{
+			Dispatcher.UIThread.Post(() =>
+			{
+				if (_currentStepIndex < _steps.Count - 1) {
+					_currentStepIndex++;
+					CurrentViewModel = _steps[_currentStepIndex]();
+				}
+			});
+		}, outputScheduler: RxApp.MainThreadScheduler);
 	}
 
 	public ICommand NavigatePrevious {
-		get => ReactiveCommand.Create(() => {
-			if (_currentStepIndex > 0) {
-				_currentStepIndex--;
-				CurrentViewModel = _steps[_currentStepIndex]();
-			}
-		});
-
+		get => ReactiveCommand.Create(() =>
+		{
+			Dispatcher.UIThread.Post(() =>
+			{
+				if (_currentStepIndex > 0) {
+					_currentStepIndex--;
+					CurrentViewModel = _steps[_currentStepIndex]();
+				}
+			});
+		}, outputScheduler: RxApp.MainThreadScheduler);
 	}
 
-	public ICommand UndoCommand => ReactiveCommand.Create(_undoRedoService.Undo);
-	public ICommand RedoCommand => ReactiveCommand.Create(_undoRedoService.Redo);
+	public ICommand UndoCommand {
+		get => ReactiveCommand.Create(
+			() => Dispatcher.UIThread.Post(_undoRedoService.Undo),
+			outputScheduler: RxApp.MainThreadScheduler
+		);
+	}
+
+	public ICommand RedoCommand {
+		get => ReactiveCommand.Create(
+			() => Dispatcher.UIThread.Post(_undoRedoService.Redo),
+			outputScheduler: RxApp.MainThreadScheduler
+		);
+	}
 }
