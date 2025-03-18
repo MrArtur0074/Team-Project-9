@@ -3,38 +3,31 @@
         xmlns:vm="using:Project_9.ViewModels"
         xmlns:v="using:Project_9.Views"
         x:Class="Project_9.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
         Title="Aircraft Wing Design Tool"
         Width="800"
         Height="600">
 
-    <!-- Define DataTemplates as a separate property -->
     <Window.DataTemplates>
-        <DataTemplates>
-            <!-- Wing Geometry View -->
-            <DataTemplate DataType="vm:WingGeometryViewModel">
-                <v:WingGeometryView />
-            </DataTemplate>
+        <DataTemplate DataType="vm:WingGeometryViewModel">
+            <v:WingGeometryView />
+        </DataTemplate>
 
-            <!-- Airfoil Config View -->
-            <DataTemplate DataType="vm:AirfoilConfigViewModel">
-                <v:AirfoilConfigView />
-            </DataTemplate>
+        <DataTemplate DataType="vm:AirfoilConfigViewModel">
+            <v:AirfoilConfigView />
+        </DataTemplate>
 
-            <!-- Rib Placement View -->
-            <DataTemplate DataType="vm:RibPlacementViewModel">
-                <v:RibPlacementView />
-            </DataTemplate>
+        <DataTemplate DataType="vm:RibPlacementViewModel">
+            <v:RibPlacementView />
+        </DataTemplate>
 
-            <!-- Spar Config View -->
-            <DataTemplate DataType="vm:SparConfigViewModel">
-                <v:SparConfigView />
-            </DataTemplate>
+        <DataTemplate DataType="vm:SparConfigViewModel">
+            <v:SparConfigView />
+        </DataTemplate>
 
-            <!-- DWG Export View -->
-            <DataTemplate DataType="vm:DwgExportViewModel">
-                <v:DwgExportView />
-            </DataTemplate>
-        </DataTemplates>
+        <DataTemplate DataType="vm:DwgExportViewModel">
+            <v:DwgExportView />
+        </DataTemplate>
     </Window.DataTemplates>
 
     <DockPanel>
