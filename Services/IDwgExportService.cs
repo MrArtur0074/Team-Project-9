@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Project_9.Models;
+using Oswalt.Models;
 
-namespace Project_9.Services;
+namespace Oswalt.Services;
 
 public interface IDwgExportService
 {

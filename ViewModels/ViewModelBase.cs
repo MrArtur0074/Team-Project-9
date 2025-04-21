@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ReactiveUI;
 
-namespace Project_9.ViewModels;
+namespace Project9.ViewModels;
 
 public class ViewModelBase : ReactiveObject, INotifyPropertyChanged
 {

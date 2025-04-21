@@ -1,6 +1,6 @@
 using System;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a spar in an aircraft wing, defining its geometric characteristics.

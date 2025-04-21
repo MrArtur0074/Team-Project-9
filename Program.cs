@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace Project_9;
+namespace Oswalt;
 
 sealed class Program
 {

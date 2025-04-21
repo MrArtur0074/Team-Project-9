@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Project_9.Constants;
-using Project_9.Services;
+using Oswalt.Constants;
+using Oswalt.Services;
 
-namespace Project_9.Models.Commands;
+namespace Oswalt.Models.Commands;
 
 public class RibCommand(
 	RibCollection ribs,

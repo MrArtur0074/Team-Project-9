@@ -1,4 +1,4 @@
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a straight wing, a specific type of wing characterized by

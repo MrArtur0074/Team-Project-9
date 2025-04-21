@@ -1,6 +1,6 @@
-using Project_9.Services;
+using Oswalt.Services;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 public class SetPropertyCommand<T>(object target, string propertyName, T newValue) : IUndoableCommand
 {

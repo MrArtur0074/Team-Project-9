@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Aspose.CAD.FileFormats.Cad.CadObjects;
 using Aspose.CAD.Primitives;
-using Project_9.Models;
+using Oswalt.Models;
 
-namespace Project_9.Services;
+namespace Oswalt.Services;
 
 public class RibsInterpolationService
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a wing with properties and methods for defining its

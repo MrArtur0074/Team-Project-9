@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 
-namespace Project_9.Services;
+namespace Oswalt.Services;
 
 public static class FileService
 {

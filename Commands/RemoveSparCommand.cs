@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Project_9.Models;
-using Project_9.Services;
+using Oswalt.Models;
+using Oswalt.Services;
 
-namespace Project_9.Commands;
+namespace Oswalt.Commands;
 
 public class RemoveSparCommand(List<Spar> spars, Spar spar) : IUndoableCommand
 {

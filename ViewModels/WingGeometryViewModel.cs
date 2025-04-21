@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Project_9.Models;
-using Project_9.Services;
+using Oswalt.Models;
+using Oswalt.Services;
 
-namespace Project_9.ViewModels;
+namespace Project9.ViewModels;
 
 public class WingGeometryViewModel : ViewModelBase, INotifyDataErrorInfo
 {

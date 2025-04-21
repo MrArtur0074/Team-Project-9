@@ -1,44 +1,47 @@
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using Project_9.Models;
-using Project_9.Services;
+using Microsoft.Win32;
+using Oswalt.Models;
+using Oswalt.Services;
 using ReactiveUI;
 
-namespace Project_9.ViewModels;
+namespace Project9.ViewModels;
 
-public class AirfoilConfigViewModel(Wing wing, UndoRedoService undoRedo, TopLevel topLevel) : ViewModelBase
+public class AirfoilConfigViewModel : ViewModelBase
 {
-	public Airfoil RootAirfoil => wing.RootAirfoil;
-	public Airfoil TipAirfoil => wing.TipAirfoil;
-	
-	public ICommand ImportRootAirfoilCommand {
-		get => ReactiveCommand.CreateFromTask(() => {
-			ProcessImport(nameof(Wing.RootAirfoil));
-			return Task.CompletedTask;
-		});
-	}
+    private readonly Wing _wing;
+    private readonly UndoRedoService _undoRedo;
 
-	public ICommand ImportTipAirfoilCommand {
-		get => ReactiveCommand.CreateFromTask(() => {
-			ProcessImport(nameof(Wing.TipAirfoil));
-			return Task.CompletedTask;
-		});
-	}
+    public AirfoilConfigViewModel(Wing wing, UndoRedoService undoRedo)
+    {
+        _wing = wing;
+        _undoRedo = undoRedo;
+    }
 
-	private async void ProcessImport(string paramName) {
-		var file = await FileService.OpenFilePickerAsync(
-			topLevel,
-			new FilePickerFileType("Airfoil DAT Files") {
-				Patterns = ["*.dat"],
-				MimeTypes = ["text/plain"]
-			});
-		if (file is null) {
-			throw new FileLoadException("Failed to load the file.");
-		}
-		Airfoil airfoil = AirfoilParserService.Parse(file);
-		undoRedo.Execute(new SetPropertyCommand<Airfoil>(wing, paramName, airfoil));
-	}
+    public Airfoil RootAirfoil => _wing.RootAirfoil;
+    public Airfoil TipAirfoil => _wing.TipAirfoil;
+
+    public ICommand ImportRootAirfoilCommand =>
+        ReactiveCommand.Create(() => ProcessImport(nameof(Wing.RootAirfoil)));
+
+    public ICommand ImportTipAirfoilCommand =>
+        ReactiveCommand.Create(() => ProcessImport(nameof(Wing.TipAirfoil)));
+
+    private void ProcessImport(string paramName)
+    {
+        var dialog = new OpenFileDialog
+        {
+            Title = "Select Airfoil DAT File",
+            Filter = "DAT files (*.dat)|*.dat|All files (*.*)|*.*",
+            Multiselect = false
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            string filePath = dialog.FileName;
+            string fileContent = File.ReadAllText(filePath);
+            Airfoil airfoil = AirfoilParserService.Parse(fileContent);
+            _undoRedo.Execute(new SetPropertyCommand<Airfoil>(_wing, paramName, airfoil));
+        }
+    }
 }

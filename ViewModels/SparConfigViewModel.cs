@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using Avalonia;
-using Project_9.Commands;
-using Project_9.Models;
-using Project_9.Models.Commands;
-using Project_9.Services;
+using Oswalt.Commands;
+using Oswalt.Models;
+using Oswalt.Models.Commands;
+using Oswalt.Services;
 using ReactiveUI;
 
-namespace Project_9.ViewModels;
+namespace Project9.ViewModels;
 
 public class SparConfigViewModel(Wing wing, UndoRedoService undoRedo) : ViewModelBase
 {

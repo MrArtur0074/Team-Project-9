@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Project_9.Constants;
+using Oswalt.Constants;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a collection of ribs in a wing.

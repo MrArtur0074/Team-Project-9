@@ -1,4 +1,4 @@
-namespace Project_9.Constants;
+namespace Oswalt.Constants;
 
 public class MathConstants
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents an elliptical wing, a specialized type of wing with 

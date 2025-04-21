@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Aspose.CAD.Primitives;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 public static class AirfoilParserService
 {

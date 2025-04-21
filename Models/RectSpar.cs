@@ -1,6 +1,6 @@
 using Avalonia;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a spar in an aircraft wing with a rectangular profile.

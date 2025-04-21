@@ -1,16 +1,14 @@
-<UserControl
-    x:Class="Project_9.Views.WingGeometryView"
-    x:DataType="vm:WingGeometryViewModel"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:vm="using:Project_9.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+﻿<UserControl
+    x:Class="Oswalt.Views.WingGeometryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Oswalt.ViewModels"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls">
 
     <Grid
         ColumnDefinitions="Auto,200"
         Margin="10"
         RowDefinitions="Auto,Auto,Auto,Auto">
-
 
         <TextBlock
             Grid.Column="0"
@@ -28,7 +26,7 @@
             Grid.Row="1"
             Text="Root Chord Length:"
             VerticalAlignment="Center" />
-        <NumericUpDown
+        <controls:NumericUpDown
             Grid.Column="1"
             Grid.Row="1"
             Margin="5"
@@ -39,7 +37,7 @@
             Grid.Row="2"
             Text="Wing Span:"
             VerticalAlignment="Center" />
-        <NumericUpDown
+        <controls:NumericUpDown
             Grid.Column="1"
             Grid.Row="2"
             Margin="5"
@@ -50,7 +48,7 @@
             Grid.Row="3"
             Text="Incidence Angle:"
             VerticalAlignment="Center" />
-        <NumericUpDown
+        <controls:NumericUpDown
             Grid.Column="1"
             Grid.Row="3"
             Margin="5"

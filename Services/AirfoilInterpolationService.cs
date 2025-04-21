@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Aspose.CAD.Primitives;
-using Project_9.Models;
-using Project_9.Settings;
+using Oswalt.Models;
+using Oswalt.Settings;
 
-namespace Project_9.Services;
+namespace Oswalt.Services;
 
 public static class AirfoilsInterpolationService
 {

@@ -1,6 +1,6 @@
 using Aspose.CAD.Primitives;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents an airfoil as a collection of points defining its shape.

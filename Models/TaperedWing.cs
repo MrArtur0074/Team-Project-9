@@ -1,6 +1,6 @@
 using System;
 
-namespace Project_9.Models;
+namespace Oswalt.Models;
 
 /// <summary>
 /// Represents a tapered wing with properties and methods for defining its

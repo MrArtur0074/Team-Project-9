@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Project_9.Services;
+namespace Project9.Services;
 
 public class UndoRedoService
 {
