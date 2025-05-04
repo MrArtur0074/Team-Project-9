@@ -2,78 +2,100 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aspose.CAD.FileFormats.Cad.CadObjects;
+using Aspose.CAD.FileFormats.Collada.FileParser.Elements;
 using Aspose.CAD.Primitives;
+using Avalonia.Controls.Documents;
 using Project_9.Models;
 
 namespace Project_9.Services;
 
 public class RibsInterpolationService
 {
-	private int           _rootChord;
-	private double        _incidenceAngleSin;
-	private double        _incidenceAngleCos;
-	private RibCollection _ribs;
+	private Wing                 _wing;
+	private Airfoil[]            _interpolatedAirfoils;
+	private List<CadBlockEntity> _ribEntities;
 
+	private double _incidenceAngleSin;
+	private double _incidenceAngleCos;
+	
 	public CadBlockEntity[] Interpolate(Wing wing) {
 		if (wing is null || wing.Ribs is null) {
 			throw new ArgumentException("Invalid input data.");
 		}
 
-		var ribs = wing.Ribs;
+		_wing = wing;
 
-		_rootChord = wing.RootChord;
-		double radians = double.DegreesToRadians(wing.IncidenceAngle);
+		double radians = double.DegreesToRadians(_wing.IncidenceAngle);
 		_incidenceAngleSin = Double.Sin(radians);
 		_incidenceAngleCos = Double.Cos(radians);
-		_ribs = ribs;
 
-		Airfoil[] interpolatedAirfoils = wing.RootAirfoil == wing.TipAirfoil
-			? Enumerable.Repeat(wing.RootAirfoil, ribs.Ribs.Count).ToArray()
-			: AirfoilsInterpolationService.Interpolate(wing.RootAirfoil, wing.TipAirfoil, wing.Span, ribs);
+		_interpolatedAirfoils = _wing.RootAirfoil == _wing.TipAirfoil
+			? Enumerable.Repeat(_wing.RootAirfoil, _wing.Ribs.Count).ToArray()
+			: AirfoilsInterpolationService.Interpolate(_wing.RootAirfoil, _wing.TipAirfoil, _wing.Span, _wing.Ribs);
 
-		List<CadBlockEntity> ribEntities = [];
-		for (int i = 0; i < interpolatedAirfoils.Length; ++i) {
-			ribEntities.Add(CreateRibGeometry(interpolatedAirfoils[i], i));
+		_ribEntities = [.._interpolatedAirfoils.Select(CreateRibGeometry)];
+
+		foreach (Spar spar in _wing.Spars) {
+			IntegrateSpar(_ribEntities, spar);
 		}
 
-		foreach (Spar spar in wing.Spars) {
-			IntegrateSpar(ribEntities, spar, wing);
-		}
-
-		return ribEntities.ToArray();
+		return _ribEntities.ToArray();
 	}
-
+	
 	private CadBlockEntity CreateRibGeometry(Airfoil airfoil, int id) {
 		List<Cad3DPoint> transformedPoints = airfoil.Points
-			.Select(p => TransformPoint(p.point))
+			.Select(p => TransformPoint(p.point, CalculateChordLength(id)))
 			.Select(p => new Cad3DPoint(p.X, p.Y))
 			.ToList();
 
-		CadSpline ribSpline = new CadSpline {
+		var ribSpline = new CadSpline {
 			ControlPoints = transformedPoints,
 			Closed = 1
 		};
 
 		var ribGeometry = new CadBlockEntity() {
-			Name = airfoil.Name + id
+			Name = airfoil.Name + id,
+			Entities = [ribSpline]
 		};
-		ribGeometry.AddEntity(ribSpline);
-
+		
 		return ribGeometry;
 	}
 
-	private Point2D TransformPoint(Point2D point) {
-		double x = point.X * _rootChord;
-		double y = point.Y * _rootChord;
+	// Applies scale and rotation to specific point of an airfoil
+	private Point2D TransformPoint(Point2D point, double scaleFactor) {
+		double x = point.X * scaleFactor;
+		double y = point.Y * scaleFactor;
 		double rotatedX = x * _incidenceAngleCos - y * _incidenceAngleSin;
 		double rotatedY = x * _incidenceAngleSin + y * _incidenceAngleCos;
 		return new Point2D(rotatedX, rotatedY);
 	}
 
-	private void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar, Wing wing) {
+	private static void AddCircleSparToRib(CadBlockEntity rib, CircleSpar spar, double chordOffset) {
+		CadCircle circle = new CadCircle {
+			CenterPoint = new Cad3DPoint(chordOffset, 0.0),
+			Radius = spar.Radius
+		};
+		rib.AddEntity(circle);
+	}
+
+	private double CalculateChordLength(int ribIndex) {
+		switch (_wing) {
+			case StraightWing wing:
+				return wing.RootChord;
+			case TaperedWing wing:
+				double tipChord = wing.RootChord / wing.TaperRatio;
+				return tipChord + (wing.RootChord - tipChord) / wing.Span * 2.0 * wing.Ribs[ribIndex];
+			case EllipticalWing wing:
+				double x = wing.Ribs[ribIndex];
+				return wing.RootChord * double.Sqrt(1.0 - (x * x) / (wing.Span * wing.Span / 4.0));
+		}
+		return 1.0;
+	}
+
+	private void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar) {
 		for (int i = spar.StartRib; i <= spar.EndRib; ++i) {
 			var rib = ribEntities[i];
-			double chordOffset = CalculateChordOffset(spar, i);
+			double chordOffset = CalculateSparChordOffset(spar, i);
 
 			switch (spar) {
 				case RectSpar rectSpar:
@@ -101,19 +123,11 @@ public class RibsInterpolationService
 		rib.AddEntity(rect);
 	}
 
-	private static void AddCircleSparToRib(CadBlockEntity rib, CircleSpar spar, double chordOffset) {
-		CadCircle circle = new CadCircle {
-			CenterPoint = new Cad3DPoint(chordOffset, 0.0),
-			Radius = spar.Radius
-		};
-		rib.AddEntity(circle);
-	}
-
-	private double CalculateChordOffset(Spar spar, int ribIndex) {
+	private double CalculateSparChordOffset(Spar spar, int ribIndex) {
 		switch (spar.Alignment) {
 			case Spar.AlignmentType.Linear:
-				double x = (_ribs.Ribs[ribIndex] - _ribs.Ribs[spar.StartRib]) /
-				           (_ribs.Ribs[spar.EndRib] - _ribs.Ribs[spar.StartRib]);
+				double x = (_wing.Ribs[ribIndex] - _wing.Ribs[spar.StartRib]) /
+				           (_wing.Ribs[spar.EndRib] - _wing.Ribs[spar.StartRib]);
 				return spar.StartChordOffset + x * (spar.EndChordOffset - spar.StartChordOffset);
 			case Spar.AlignmentType.Interpolated:
 				throw new NotImplementedException("Interpolated alignment is not implemented.");
