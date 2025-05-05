@@ -10,8 +10,8 @@ namespace Oswalt.Models;
 public abstract class Wing
 {
 	private string _name;
-	private int    _rootChord;
-	private int    _span;
+	private double _rootChord;
+	private double _span;
 	private double _incidenceAngle;
 
 	private Airfoil _rootAirfoil;
@@ -32,7 +32,7 @@ public abstract class Wing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the root chord length is out of the defined range.
 	/// </exception>
-	public int RootChord {
+	public double RootChord {
 		get => _rootChord;
 		set {
 			if (value is < WingConstraints.MinRootChord or > WingConstraints.MaxRootChord) {
@@ -50,7 +50,7 @@ public abstract class Wing
 	/// <exception cref="ArgumentOutOfRangeException">
 	/// Thrown when the span is out of the defined range.
 	/// </exception>
-	public int Span {
+	public double Span {
 		get => _span;
 		set {
 			if (value is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
@@ -107,7 +107,7 @@ public abstract class Wing
 	/// Gets the collection of spars of the wing.
 	/// </summary>
 	public List<Spar> Spars { get; private set; }
-	
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Wing"/> class with the specified parameters.
 	/// </summary>
@@ -123,8 +123,8 @@ public abstract class Wing
 	/// </exception>
 	protected Wing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle
 	) {
 		Name = name;
@@ -152,8 +152,8 @@ public abstract class Wing
 	/// </exception>
 	protected Wing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil

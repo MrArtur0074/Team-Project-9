@@ -55,14 +55,13 @@ public class EllipticalWing : Wing
 	/// <param name="tipExclusion">The ratio of the tip exclusion, limiting the rib generation area.</param>
 	public EllipticalWing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil,
-		int chord,
 		double sweep,
-		int tipExclusion
+		double tipExclusion
 	) : base(name, rootChord, span, incidenceAngle, rootAirfoil, tipAirfoil) {
 		SweepCoefficient = sweep;
 		TipExclusionRatio = tipExclusion;
