@@ -67,7 +67,7 @@ public static class AirfoilsInterpolationService
 	}
 
 	public static Airfoil[] Interpolate(
-		Airfoil rootAirfoil, Airfoil tipAirfoil, int span, RibCollection ribCollection
+		Airfoil rootAirfoil, Airfoil tipAirfoil, double span, RibCollection ribCollection
 	) {
 		var ribs = ribCollection.Ribs;
 		int ribsCount = ribs.Count;

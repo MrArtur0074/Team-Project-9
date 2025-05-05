@@ -10,7 +10,7 @@ namespace Project_9.Models;
 /// </summary>
 public class RibCollection
 {
-	private readonly int          _span;
+	private readonly double       _halfSpan;
 	private readonly List<double> _ribs = new();
 
 	/// <summary>
@@ -25,14 +25,14 @@ public class RibCollection
 	/// </summary>
 	/// <param name="span">The span of the rib row.</param>
 	/// <exception cref="ArgumentException">Thrown when the span is out of the defined range.</exception>
-	public RibCollection(int span) {
+	public RibCollection(double span) {
 		if (span is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
 			throw new ArgumentException(
 				$"Span must be between {WingConstraints.MinWingSpan} and {WingConstraints.MaxWingSpan} mm.");
 		}
-		_span = span;
+		_halfSpan = span / 2.0;
 		_ribs.Add(0.0);
-		_ribs.Add(_span);
+		_ribs.Add(_halfSpan);
 	}
 
 	/// <summary>
@@ -106,7 +106,7 @@ public class RibCollection
 			return false;
 		}
 
-		var space = (double)_span / (n - 1);
+		var space = _halfSpan / (n - 1);
 
 		if (space + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
 			return false;
@@ -124,6 +124,6 @@ public class RibCollection
 	public void Clear() {
 		_ribs.Clear();
 		_ribs.Add(0.0);
-		_ribs.Add(_span);
+		_ribs.Add(_halfSpan);
 	}
 }

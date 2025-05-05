@@ -8,22 +8,22 @@ public static class WingConstraints
 	/// <summary>
 	/// The minimum allowable wingspan of a wing, measured in millimeters.
 	/// </summary>
-	public const int MinWingSpan = 500;
+	public const double MinWingSpan = 500;
 
 	/// <summary>
 	/// The maximum allowable wingspan of a wing, measured in millimeters.
 	/// </summary>
-	public const int MaxWingSpan = 5000;
+	public const double MaxWingSpan = 5000;
 
 	/// <summary>
 	/// The minimum allowable root chord length, measured in millimeters.
 	/// </summary>
-	public const int MinRootChord = 100;
+	public const double MinRootChord = 100;
 
 	/// <summary>
 	/// The maximum allowable root chord length, measured in millimeters.
 	/// </summary>
-	public const int MaxRootChord = 1000;
+	public const double MaxRootChord = 1000;
 
 	/// <summary>
 	/// The minimum allowable taper ratio, which is the ratio of the tip chord 

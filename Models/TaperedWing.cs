@@ -34,8 +34,8 @@ public class TaperedWing : Wing
 	/// <param name="taperRatio">The taper ratio of the wing.</param>
 	public TaperedWing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil,
