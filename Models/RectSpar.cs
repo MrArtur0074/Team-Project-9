@@ -1,4 +1,4 @@
-using Avalonia;
+using Aspose.CAD;
 
 namespace Project_9.Models;
 
@@ -11,7 +11,7 @@ public class RectSpar : Spar
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RectSpar"/> class with the specified parameters.
 	/// </summary>
-	/// <param name="rectangle">The rectangle describing the spar's profile.</param>
+	/// <param name="rect">The rectangle describing the spar's profile.</param>
 	public RectSpar(
 		int ribCount,
 		int startRib,
@@ -19,9 +19,9 @@ public class RectSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Rect rectangle
+		Rectangle rect
 	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
-		Rectangle = rectangle;
+		Rect = rect;
 	}
 
 	/// <summary>
@@ -42,5 +42,5 @@ public class RectSpar : Spar
 	/// <summary>
 	/// Gets or sets the rectangle defining the spar's profile.
 	/// </summary>
-	public Rect Rectangle { get; set; }
+	public Rectangle Rect { get; set; }
 }
