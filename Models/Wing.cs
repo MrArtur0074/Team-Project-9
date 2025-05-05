@@ -131,7 +131,7 @@ public abstract class Wing
 		RootChord = rootChord;
 		Span = span;
 		IncidenceAngle = incidenceAngle;
-		Ribs = new RibCollection(span);
+		Ribs = new RibCollection();
 		Spars = new List<Spar>();
 	}
 

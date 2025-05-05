@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Project_9.Constants;
@@ -6,35 +5,23 @@ using Project_9.Constants;
 namespace Project_9.Models;
 
 /// <summary>
-/// Represents a collection of ribs in a wing.
+/// Represents a collection of ribs using normalized positions [0.0, 1.0].
 /// Includes permanent root and tip ribs.
 /// </summary>
 public class RibCollection : IEnumerable<double>
 {
-	private readonly double       _halfSpan;
 	private readonly List<double> _ribs = new();
 
-	public double this[int index] {
-		get => _ribs[index];
-	}
+	public double this[int index] => _ribs[index];
 
-	public int Count {
-		get => _ribs.Count;
-	}
+	public int Count => _ribs.Count;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="RibCollection"/> class with a specified span.
+	/// Initializes a new instance of the <see cref="RibCollection"/> class.
 	/// </summary>
-	/// <param name="span">The span of the rib row.</param>
-	/// <exception cref="ArgumentException">Thrown when the span is out of the defined range.</exception>
-	public RibCollection(double span) {
-		if (span is < WingConstraints.MinWingSpan or > WingConstraints.MaxWingSpan) {
-			throw new ArgumentException(
-				$"Span must be between {WingConstraints.MinWingSpan} and {WingConstraints.MaxWingSpan} mm.");
-		}
-		_halfSpan = span / 2.0;
+	public RibCollection() {
 		_ribs.Add(0.0);
-		_ribs.Add(_halfSpan);
+		_ribs.Add(1.0);
 	}
 
 	/// <summary>
@@ -44,16 +31,17 @@ public class RibCollection : IEnumerable<double>
 	/// <returns><c>true</c> if the rib was added successfully; otherwise, <c>false</c>.</returns>
 	public bool AddRib(int index) {
 		if (index > 0 && index < _ribs.Count) {
-			var prevRibPos = _ribs[index - 1];
-			var nextRibPos = _ribs[index];
-			var space = (nextRibPos - prevRibPos) / 2.0;
+			var prev = _ribs[index - 1];
+			var next = _ribs[index];
+			var space = (next - prev) / 2.0;
 
 			if (space + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
 				return false;
 			}
 
-			var position = prevRibPos + space;
-			_ribs.Insert(index, position);
+			var newPos = prev + space;
+			_ribs.Insert(index, newPos);
+			return true;
 		}
 		return false;
 	}
@@ -67,7 +55,6 @@ public class RibCollection : IEnumerable<double>
 		if (index <= 0 || index >= _ribs.Count - 1) {
 			return false;
 		}
-
 		_ribs.RemoveAt(index);
 		return true;
 	}
@@ -76,25 +63,25 @@ public class RibCollection : IEnumerable<double>
 	/// Adjusts the space between ribs by shifting the position of a specific rib.
 	/// </summary>
 	/// <param name="index">The index of the rib to shift.</param>
-	/// <param name="shift">The amount to shift the rib position.</param>
+	/// <param name="shift">The distance to shift the rib position.</param>
 	/// <returns><c>true</c> if the shift was successful; otherwise, <c>false</c>.</returns>
 	public bool ChangeRibPosition(int index, double shift) {
 		if (index <= 0 || index >= _ribs.Count - 1) {
 			return false;
 		}
 
-		var leftSpace = _ribs[index] - _ribs[index - 1];
-		var rightSpace = _ribs[index + 1] - _ribs[index];
-		var newLeftSpace = leftSpace + shift;
-		var newRightSpace = rightSpace - shift;
+		var left = _ribs[index - 1];
+		var right = _ribs[index + 1];
+		var current = _ribs[index];
+		var newPos = current + shift;
 
-		if (newLeftSpace + MathConstants.Tolerance < WingConstraints.MinInterRibSpace
-		    || newRightSpace + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
+		if (newPos - left + MathConstants.Tolerance < WingConstraints.MinInterRibSpace ||
+		    right - newPos + MathConstants.Tolerance < WingConstraints.MinInterRibSpace ||
+		    newPos <= left || newPos >= right) {
 			return false;
 		}
 
-		var newPosition = _ribs[index] + shift;
-
+		_ribs[index] = newPos;
 		return true;
 	}
 
@@ -104,19 +91,17 @@ public class RibCollection : IEnumerable<double>
 	/// <param name="n">The number of ribs to distribute, including root and tip ribs.</param>
 	/// <returns><c>true</c> if the reset was successful; otherwise, <c>false</c>.</returns>
 	public bool ResetWithRibsNumber(int n) {
-		if (n < 2) {
-			return false;
-		}
+		if (n < 2) return false;
 
-		var space = _halfSpan / (n - 1);
-
-		if (space + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
+		var spacing = 1.0 / (n - 1);
+		if (spacing + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
 			return false;
 		}
 
 		_ribs.Clear();
-		for (var i = 0; i < n; ++i) _ribs.Add(space * i);
-
+		for (int i = 0; i < n; i++) {
+			_ribs.Add(i * spacing);
+		}
 		return true;
 	}
 
@@ -126,14 +111,10 @@ public class RibCollection : IEnumerable<double>
 	public void Clear() {
 		_ribs.Clear();
 		_ribs.Add(0.0);
-		_ribs.Add(_halfSpan);
+		_ribs.Add(1.0);
 	}
 
-	public IEnumerator<double> GetEnumerator() {
-		return _ribs.GetEnumerator();
-	}
+	public IEnumerator<double> GetEnumerator() => _ribs.GetEnumerator();
 
-	IEnumerator IEnumerable.GetEnumerator() {
-		return GetEnumerator();
-	}
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
