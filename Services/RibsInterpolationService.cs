@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Aspose.CAD.FileFormats.Cad.CadObjects;
-using Aspose.CAD.FileFormats.Collada.FileParser.Elements;
 using Aspose.CAD.Primitives;
-using Avalonia.Controls.Documents;
 using Project_9.Models;
 
 namespace Project_9.Services;
@@ -41,10 +40,11 @@ public class RibsInterpolationService
 
 		return _ribEntities.ToArray();
 	}
-	
+
 	private CadBlockEntity CreateRibGeometry(Airfoil airfoil, int id) {
+		double chordLength = CalculateChordLength(id);
 		List<Cad3DPoint> transformedPoints = airfoil.Points
-			.Select(p => TransformPoint(p.point, CalculateChordLength(id)))
+			.Select(p => TransformPoint(p.point, chordLength))
 			.Select(p => new Cad3DPoint(p.X, p.Y))
 			.ToList();
 
@@ -53,15 +53,12 @@ public class RibsInterpolationService
 			Closed = 1
 		};
 
-		var ribGeometry = new CadBlockEntity() {
+		return new CadBlockEntity {
 			Name = airfoil.Name + id,
 			Entities = [ribSpline]
 		};
-		
-		return ribGeometry;
 	}
 
-	// Applies scale and rotation to specific point of an airfoil
 	private Point2D TransformPoint(Point2D point, double scaleFactor) {
 		double x = point.X * scaleFactor;
 		double y = point.Y * scaleFactor;
@@ -79,15 +76,26 @@ public class RibsInterpolationService
 	}
 
 	private double CalculateChordLength(int ribIndex) {
+		double chord;
+		
 		switch (_wing) {
 			case StraightWing wing:
-				return wing.RootChord;
+				chord = wing.RootChord;
+				break;
 			case TaperedWing wing:
 				double tipChord = wing.RootChord / wing.TaperRatio;
-				return tipChord + (wing.RootChord - tipChord) / wing.Span * 2.0 * wing.Ribs[ribIndex];
+				chord = tipChord + (wing.RootChord - tipChord) / wing.Span * 2.0 * wing.Ribs[ribIndex];
+				break;
 			case EllipticalWing wing:
 				double x = wing.Ribs[ribIndex];
-				return wing.RootChord * double.Sqrt(1.0 - (x * x) / (wing.Span * wing.Span / 4.0));
+				double spanHalf = wing.Span / 2.0;
+				double arg = 1.0 - (x * x) / (spanHalf * spanHalf);
+				Console.WriteLine($"[EllipticalWing] ribIndex={ribIndex}, x={x}, spanHalf={spanHalf}, arg={arg}");
+				chord = wing.RootChord * double.Sqrt(arg);
+				break;
+			default:
+				chord = 1.0;
+				break;
 		}
 		return 1.0;
 	}
