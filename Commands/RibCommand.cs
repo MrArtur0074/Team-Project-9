@@ -1,58 +1,69 @@
-using System;
-using System.Collections.Generic;
-using Project_9.Constants;
 using Project_9.Services;
 
 namespace Project_9.Models.Commands;
 
 public class RibCommand(
 	RibCollection ribs,
-	RibCommand.RibAction action,
+	RibAction action,
 	int index = -1,
 	double shift = 0,
 	int n = 0)
 	: IUndoableCommand
 {
-	public enum RibAction
-	{
-		Add,
-		Remove,
-		Move,
-		Reset,
-		Clear
-	}
-
-	private readonly List<double> _previousState = new List<double>(ribs.Ribs);
+	private readonly RibCollection _backup = new();
+	private          bool          _executed;
 
 	public void Execute() {
+		_backup.Clear();
+		foreach (var rib in ribs)
+			_backup.AddRib(_backup.Count - 1);
+		for (int i = 1; i < ribs.Count - 1; i++)
+			_backup.ChangeRibPosition(i, ribs[i] - _backup[i]);
+
 		switch (action) {
 			case RibAction.Add:
-				ribs.AddRib(index);
+				_executed = ribs.AddRib(index);
 				break;
 			case RibAction.Remove:
-				ribs.RemoveRib(index);
+				_executed = ribs.RemoveRib(index);
 				break;
 			case RibAction.Move:
-				ribs.ChangeRibPosition(index, shift);
+				_executed = ribs.ChangeRibPosition(index, shift);
 				break;
 			case RibAction.Reset:
-				ribs.ResetWithRibsNumber(n);
+				_executed = ribs.ResetWithRibsNumber(n);
 				break;
 			case RibAction.Clear:
 				ribs.Clear();
+				_executed = true;
+				break;
+			default:
+				_executed = false;
 				break;
 		}
 	}
 
+
 	public void Undo() {
+		if (!_executed) return;
+
 		ribs.Clear();
-		foreach (var position in _previousState) {
-			if (position == 0 || Math.Abs(position - 1) < MathConstants.Tolerance) continue;
-			ribs.AddRib(ribs.Ribs.Count - 1);
-			ribs.ChangeRibPosition(
-				ribs.Ribs.Count - 2,
-				position - ribs.Ribs[^2]
-			);
+		for (var i = 0; i < _backup.Count; i++) {
+			ribs.AddRib(ribs.Count - 1);
+		}
+
+		for (int i = 1; i < _backup.Count - 1; i++) {
+			double delta = _backup[i] - ribs[i];
+			ribs.ChangeRibPosition(i, delta);
 		}
 	}
+}
+
+public enum RibAction
+{
+	Add,
+	Remove,
+	Move,
+	Reset,
+	Clear
 }
