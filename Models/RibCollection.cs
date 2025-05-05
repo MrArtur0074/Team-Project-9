@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Project_9.Constants;
 
@@ -8,16 +9,17 @@ namespace Project_9.Models;
 /// Represents a collection of ribs in a wing.
 /// Includes permanent root and tip ribs.
 /// </summary>
-public class RibCollection
+public class RibCollection : IEnumerable<double>
 {
 	private readonly double       _halfSpan;
 	private readonly List<double> _ribs = new();
 
-	/// <summary>
-	/// Gets the collection of ribs.
-	/// </summary>
-	public IReadOnlyList<double> Ribs {
-		get => _ribs;
+	public double this[int index] {
+		get => _ribs[index];
+	}
+
+	public int Count {
+		get => _ribs.Count;
 	}
 
 	/// <summary>
@@ -125,5 +127,13 @@ public class RibCollection
 		_ribs.Clear();
 		_ribs.Add(0.0);
 		_ribs.Add(_halfSpan);
+	}
+
+	public IEnumerator<double> GetEnumerator() {
+		return _ribs.GetEnumerator();
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() {
+		return GetEnumerator();
 	}
 }
