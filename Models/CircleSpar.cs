@@ -1,4 +1,4 @@
-using Avalonia;
+using Aspose.CAD.Primitives;
 
 namespace Oswalt.Models;
 
@@ -20,7 +20,7 @@ public class CircleSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Point center,
+		Point2D center,
 		double radius
 	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
 		Center = center;
@@ -30,7 +30,7 @@ public class CircleSpar : Spar
 	/// <summary>
 	/// Gets or sets the center of the spar's profile.
 	/// </summary>
-	public Point Center { get; set; }
+	public Point2D Center { get; set; }
 
 	/// <summary>
 	/// Gets or sets the radius of the spar's profile.
