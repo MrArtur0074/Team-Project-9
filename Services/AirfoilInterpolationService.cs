@@ -69,8 +69,7 @@ public static class AirfoilsInterpolationService
 	public static Airfoil[] Interpolate(
 		Airfoil rootAirfoil, Airfoil tipAirfoil, double span, RibCollection ribCollection
 	) {
-		var ribs = ribCollection.Ribs;
-		int ribsCount = ribs.Count;
+		int ribsCount = ribCollection.Count;
 
 		var airfoils = new Airfoil[ribsCount];
 
@@ -78,7 +77,7 @@ public static class AirfoilsInterpolationService
 		var unifiedTipAirfoil = UnifyAirfoil(tipAirfoil);
 
 		for (int i = 0; i < ribsCount; ++i) {
-			var ratio = ribs[i] / span;
+			var ratio = ribCollection[i] / span;
 			airfoils[i] = InterpolateAirfoil(unifiedRootAirfoil, unifiedTipAirfoil, ratio);
 		}
 
