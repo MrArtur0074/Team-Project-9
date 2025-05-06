@@ -42,5 +42,5 @@ public class RectSpar : Spar
 	/// <summary>
 	/// Gets or sets the rectangle defining the spar's profile.
 	/// </summary>
-	public Rectangle Rect { get; set; }
+	public RectangleF Rect { get; set; }
 }
