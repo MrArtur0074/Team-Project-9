@@ -94,9 +94,6 @@ public class RibCollection : IEnumerable<double>
 		if (n < 2) return false;
 
 		var spacing = 1.0 / (n - 1);
-		if (spacing + MathConstants.Tolerance < WingConstraints.MinInterRibSpace) {
-			return false;
-		}
 
 		_ribs.Clear();
 		for (int i = 0; i < n; i++) {
