@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Aspose.CAD.FileFormats.Cad.CadObjects;
 using Aspose.CAD.Primitives;
@@ -16,7 +15,7 @@ public class RibsInterpolationService
 
 	private double _incidenceAngleSin;
 	private double _incidenceAngleCos;
-	
+
 	public CadBlockEntity[] Interpolate(Wing wing) {
 		if (wing is null || wing.Ribs is null) {
 			throw new ArgumentException("Invalid input data.");
@@ -30,7 +29,7 @@ public class RibsInterpolationService
 
 		_interpolatedAirfoils = _wing.RootAirfoil == _wing.TipAirfoil
 			? Enumerable.Repeat(_wing.RootAirfoil, _wing.Ribs.Count).ToArray()
-			: AirfoilsInterpolationService.Interpolate(_wing.RootAirfoil, _wing.TipAirfoil, _wing.Span, _wing.Ribs);
+			: AirfoilsInterpolationService.Interpolate(_wing.RootAirfoil, _wing.TipAirfoil, _wing.Ribs);
 
 		_ribEntities = [.._interpolatedAirfoils.Select(CreateRibGeometry)];
 
@@ -43,13 +42,14 @@ public class RibsInterpolationService
 
 	private CadBlockEntity CreateRibGeometry(Airfoil airfoil, int id) {
 		double chordLength = CalculateChordLength(id);
-		List<Cad3DPoint> transformedPoints = airfoil.Points
-			.Select(p => TransformPoint(p.point, chordLength))
+		var transformedPoints = airfoil.GetPointsSelig()
+			.Select(p => TransformPoint(p, chordLength))
 			.Select(p => new Cad3DPoint(p.X, p.Y))
 			.ToList();
 
 		var ribSpline = new CadSpline {
 			ControlPoints = transformedPoints,
+			Degree = 3,
 			Closed = 1
 		};
 
@@ -77,27 +77,25 @@ public class RibsInterpolationService
 
 	private double CalculateChordLength(int ribIndex) {
 		double chord;
-		
+
 		switch (_wing) {
 			case StraightWing wing:
 				chord = wing.RootChord;
 				break;
 			case TaperedWing wing:
 				double tipChord = wing.RootChord / wing.TaperRatio;
-				chord = tipChord + (wing.RootChord - tipChord) / wing.Span * 2.0 * wing.Ribs[ribIndex];
+				chord = tipChord + (wing.RootChord - tipChord) / wing.Span * wing.Ribs[ribIndex] * wing.Span;
 				break;
 			case EllipticalWing wing:
-				double x = wing.Ribs[ribIndex];
-				double spanHalf = wing.Span / 2.0;
-				double arg = 1.0 - (x * x) / (spanHalf * spanHalf);
-				Console.WriteLine($"[EllipticalWing] ribIndex={ribIndex}, x={x}, spanHalf={spanHalf}, arg={arg}");
-				chord = wing.RootChord * double.Sqrt(arg);
+				double xLimit = 1 - wing.TipExclusionRatio;
+				double x = wing.Ribs[ribIndex] * xLimit;
+				chord = wing.RootChord * double.Sqrt(1.0 - x * x);
 				break;
 			default:
 				chord = 1.0;
 				break;
 		}
-		return 1.0;
+		return chord;
 	}
 
 	private void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar) {
@@ -117,15 +115,15 @@ public class RibsInterpolationService
 	}
 
 	private static void AddRectSparToRib(CadBlockEntity rib, RectSpar spar, double chordOffset) {
-		double x = spar.Rectangle.Width / 2 + chordOffset;
-		double y = spar.Rectangle.Height / 2;
+		double x = spar.Rect.Width / 2 + chordOffset;
+		double y = spar.Rect.Height / 2;
 		var rect = new CadLwPolyline {
 			PointCount = 4,
 			Coordinates = [
 				new Cad2DPoint(x, y),
-				new Cad2DPoint(x + spar.Rectangle.Width, y),
-				new Cad2DPoint(x + spar.Rectangle.Width, y + spar.Rectangle.Height),
-				new Cad2DPoint(x, y + spar.Rectangle.Height)
+				new Cad2DPoint(x + spar.Rect.Width, y),
+				new Cad2DPoint(x + spar.Rect.Width, y + spar.Rect.Height),
+				new Cad2DPoint(x, y + spar.Rect.Height)
 			]
 		};
 		rib.AddEntity(rect);
