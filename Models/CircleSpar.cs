@@ -1,4 +1,4 @@
-using Aspose.CAD.Primitives;
+using Vector2 = netDxf.Vector2;
 
 namespace Project_9.Models;
 
@@ -20,7 +20,7 @@ public class CircleSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Point2D center,
+		Vector2 center,
 		double radius
 	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
 		Center = center;
@@ -30,7 +30,7 @@ public class CircleSpar : Spar
 	/// <summary>
 	/// Gets or sets the center of the spar's profile.
 	/// </summary>
-	public Point2D Center { get; set; }
+	public Vector2 Center { get; set; }
 
 	/// <summary>
 	/// Gets or sets the radius of the spar's profile.

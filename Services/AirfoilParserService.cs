@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using Aspose.CAD.Primitives;
+using netDxf;
 using Project_9.Models;
 
 namespace Project_9.Services;
@@ -65,8 +65,8 @@ public static class AirfoilParserService
 		return new Airfoil(name, upperPoints, lowerPoints);
 	}
 
-	private static Point2D[] ParsePoints(string[] lines) {
-		var points = new Point2D[lines.Length];
+	private static Vector2[] ParsePoints(string[] lines) {
+		var points = new Vector2[lines.Length];
 
 		for (int i = 0; i < lines.Length; i++) {
 			var parts = lines[i].Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
@@ -90,13 +90,13 @@ public static class AirfoilParserService
 					$"Warning: X coordinate {x} on line {i + 2} is outside standard [0.0, 1.0] range.");
 			}
 
-			points[i] = new Point2D(x, y);
+			points[i] = new Vector2(x, y);
 		}
 
 		return points;
 	}
 
-	private static int FindTrailingEdgeIndex(Point2D[] points) {
+	private static int FindTrailingEdgeIndex(Vector2[] points) {
 		for (int i = 0; i < points.Length - 1; i++) {
 			if (points[i].X < points[i + 1].X) {
 				return i;

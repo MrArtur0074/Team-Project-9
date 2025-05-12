@@ -1,22 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aspose.CAD.FileFormats.Cad.CadObjects;
-using Aspose.CAD.Primitives;
+using netDxf.Blocks;
+using netDxf.Entities;
+using netDxf.GTE;
+using netDxf.Tables;
 using Project_9.Models;
+using Vector2 = netDxf.Vector2;
+using Vector3 = netDxf.Vector3;
 
 namespace Project_9.Services;
 
 public class RibsInterpolationService
 {
-	private Wing                 _wing;
-	private Airfoil[]            _interpolatedAirfoils;
-	private List<CadBlockEntity> _ribEntities;
+	private Wing        _wing;
+	private Airfoil[]   _interpolatedAirfoils;
+	private List<Block> _ribEntities;
 
 	private double _incidenceAngleSin;
 	private double _incidenceAngleCos;
 
-	public CadBlockEntity[] Interpolate(Wing wing) {
+	private Layer _ribsLayer  = new Layer("Ribs");
+	private Layer _sparsLayer = new Layer("Spars");
+
+	public Block[] Interpolate(Wing wing) {
 		if (wing is null || wing.Ribs is null) {
 			throw new ArgumentException("Invalid input data.");
 		}
@@ -40,39 +47,35 @@ public class RibsInterpolationService
 		return _ribEntities.ToArray();
 	}
 
-	private CadBlockEntity CreateRibGeometry(Airfoil airfoil, int id) {
+	private Block CreateRibGeometry(Airfoil airfoil, int id) {
 		double chordLength = CalculateChordLength(id);
 		var transformedPoints = airfoil.GetPointsSelig()
 			.Select(p => TransformPoint(p, chordLength))
-			.Select(p => new Cad3DPoint(p.X, p.Y))
-			.ToList();
+			.Select(p => new Vector3(p.X, p.Y, 0.0))
+			.ToArray();
 
-		var ribSpline = new CadSpline {
-			ControlPoints = transformedPoints,
-			Degree = 3,
-			Closed = 1
-		};
+		var weights = Enumerable.Repeat(1.0, transformedPoints.Length).ToList();
+		var ribSpline = new Spline(transformedPoints, weights, 3, false);
 
-		return new CadBlockEntity {
-			Name = airfoil.Name + id,
-			Entities = [ribSpline]
+		return new Block(airfoil.Name + id) {
+			Layer = _ribsLayer,
+			Entities = { ribSpline }
 		};
 	}
 
-	private Point2D TransformPoint(Point2D point, double scaleFactor) {
+	private Vector2 TransformPoint(Vector2 point, double scaleFactor) {
 		double x = point.X * scaleFactor;
 		double y = point.Y * scaleFactor;
 		double rotatedX = x * _incidenceAngleCos - y * _incidenceAngleSin;
 		double rotatedY = x * _incidenceAngleSin + y * _incidenceAngleCos;
-		return new Point2D(rotatedX, rotatedY);
+		return new Vector2(rotatedX, rotatedY);
 	}
 
-	private static void AddCircleSparToRib(CadBlockEntity rib, CircleSpar spar, double chordOffset) {
-		CadCircle circle = new CadCircle {
-			CenterPoint = new Cad3DPoint(chordOffset, 0.0),
-			Radius = spar.Radius
+	private void AddCircleSparToRib(Block rib, CircleSpar spar, double chordOffset) {
+		var circle = new Circle(new Vector2(chordOffset, 0.0), spar.Radius) {
+			Layer = _sparsLayer
 		};
-		rib.AddEntity(circle);
+		rib.Entities.Add(circle);
 	}
 
 	private double CalculateChordLength(int ribIndex) {
@@ -98,7 +101,7 @@ public class RibsInterpolationService
 		return chord;
 	}
 
-	private void IntegrateSpar(List<CadBlockEntity> ribEntities, Spar spar) {
+	private void IntegrateSpar(List<Block> ribEntities, Spar spar) {
 		for (int i = spar.StartRib; i <= spar.EndRib; ++i) {
 			var rib = ribEntities[i];
 			double chordOffset = CalculateSparChordOffset(spar, i);
@@ -114,19 +117,21 @@ public class RibsInterpolationService
 		}
 	}
 
-	private static void AddRectSparToRib(CadBlockEntity rib, RectSpar spar, double chordOffset) {
-		double x = spar.Rect.Width / 2 + chordOffset;
-		double y = spar.Rect.Height / 2;
-		var rect = new CadLwPolyline {
-			PointCount = 4,
-			Coordinates = [
-				new Cad2DPoint(x, y),
-				new Cad2DPoint(x + spar.Rect.Width, y),
-				new Cad2DPoint(x + spar.Rect.Width, y + spar.Rect.Height),
-				new Cad2DPoint(x, y + spar.Rect.Height)
-			]
+	private void AddRectSparToRib(Block rib, RectSpar spar, double chordOffset) {
+		double x = spar.Rect.Width / 2.0 + chordOffset;
+		double y = spar.Rect.Height / 2.0;
+
+		var rect = new Polyline2D([
+			new Vector2(x, y),
+			new Vector2(x + spar.Rect.Width, y),
+			new Vector2(x + spar.Rect.Width, y + spar.Rect.Height),
+			new Vector2(x, y + spar.Rect.Height)
+		], true) {
+			Layer = _sparsLayer
 		};
-		rib.AddEntity(rect);
+
+
+		rib.Entities.Add(rect);
 	}
 
 	private double CalculateSparChordOffset(Spar spar, int ribIndex) {

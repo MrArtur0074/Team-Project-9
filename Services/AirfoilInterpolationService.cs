@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Aspose.CAD.Primitives;
+using netDxf;
 using Project_9.Models;
 using Project_9.Settings;
 
@@ -16,23 +16,23 @@ public static class AirfoilsInterpolationService
 		return new Airfoil($"{airfoil.Name} UNIFIED", upperPoints, lowerPoints);
 	}
 
-	private static Point2D[] UnifySurface(Point2D[] surfacePoints, int pointsCount) {
+	private static Vector2[] UnifySurface(Vector2[] surfacePoints, int pointsCount) {
 		var sorted = surfacePoints.OrderBy(p => p.X).ToArray();
 		double xMin = sorted.First().X;
 		double xMax = sorted.Last().X;
 		double step = (xMax - xMin) / (pointsCount - 1);
 
-		var points = new Point2D[pointsCount];
+		var points = new Vector2[pointsCount];
 		for (int i = 0; i < pointsCount; ++i) {
 			double xNew = xMin + i * step;
 			double yNew = InterpolateY(sorted, xNew);
-			points[i] = new Point2D(xNew, yNew);
+			points[i] = new Vector2(xNew, yNew);
 		}
 
 		return points;
 	}
 
-	private static double InterpolateY(Point2D[] points, double x) {
+	private static double InterpolateY(Vector2[] points, double x) {
 		if (x < points[0].X || x > points[^1].X)
 			throw new ArgumentOutOfRangeException(nameof(x),
 				$"x={x} is outside interpolation range [{points[0].X}, {points[^1].X}]");
@@ -55,17 +55,17 @@ public static class AirfoilsInterpolationService
 		return new Airfoil(name, upperPoints, lowerPoints);
 	}
 
-	private static Point2D[] InterpolateSurface(Point2D[] rootPoints, Point2D[] tipPoints, double ratio) {
+	private static Vector2[] InterpolateSurface(Vector2[] rootPoints, Vector2[] tipPoints, double ratio) {
 		if (rootPoints.Length != tipPoints.Length)
 			throw new ArgumentException("Root and tip surface points must be the same!");
 
-		var points = new Point2D[rootPoints.Length];
+		var points = new Vector2[rootPoints.Length];
 		for (int i = 0; i < rootPoints.Length; ++i) {
-			Point2D rootPoint = rootPoints[i];
-			Point2D tipPoint = tipPoints[i];
+			Vector2 rootPoint = rootPoints[i];
+			Vector2 tipPoint = tipPoints[i];
 			var x = rootPoint.X + (tipPoint.X - rootPoint.X) * ratio;
 			var y = rootPoint.Y + (tipPoint.Y - rootPoint.Y) * ratio;
-			points[i] = new Point2D(x, y);
+			points[i] = new Vector2(x, y);
 		}
 
 		return points;
