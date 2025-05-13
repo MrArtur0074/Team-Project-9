@@ -11,7 +11,7 @@ public class CircleSpar : Spar
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CircleSpar"/> class with the specified parameters.
 	/// </summary>
-	/// <param name="center">The center of the spar's profile.</param>
+	/// <param name="yOffset">The vertical offset of the spar's profile in millimeters.</param>
 	/// <param name="radius">The radius of the spar's profile.</param>
 	public CircleSpar(
 		int ribCount,
@@ -20,17 +20,11 @@ public class CircleSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Vector2 center,
+		double yOffset,
 		double radius
-	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
-		Center = center;
+	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, yOffset, alignment) {
 		Radius = radius;
 	}
-
-	/// <summary>
-	/// Gets or sets the center of the spar's profile.
-	/// </summary>
-	public Vector2 Center { get; set; }
 
 	/// <summary>
 	/// Gets or sets the radius of the spar's profile.

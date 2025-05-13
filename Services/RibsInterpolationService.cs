@@ -71,13 +71,6 @@ public class RibsInterpolationService
 		return new Vector2(rotatedX, rotatedY);
 	}
 
-	private void AddCircleSparToRib(Block rib, CircleSpar spar, double chordOffset) {
-		var circle = new Circle(new Vector2(chordOffset, 0.0), spar.Radius) {
-			Layer = _sparsLayer
-		};
-		rib.Entities.Add(circle);
-	}
-
 	private double CalculateChordLength(int ribIndex) {
 		double chord;
 
@@ -117,15 +110,22 @@ public class RibsInterpolationService
 		}
 	}
 
+	private void AddCircleSparToRib(Block rib, CircleSpar spar, double chordOffset) {
+		var circle = new Circle(new Vector2(chordOffset, 0.0), spar.Radius) {
+			Layer = _sparsLayer
+		};
+		rib.Entities.Add(circle);
+	}
+
 	private void AddRectSparToRib(Block rib, RectSpar spar, double chordOffset) {
-		double x = spar.Rect.Width / 2.0 + chordOffset;
-		double y = spar.Rect.Height / 2.0;
+		double x = spar.Width / 2.0 + chordOffset;
+		double y = spar.Height / 2.0;
 
 		var rect = new Polyline2D([
 			new Vector2(x, y),
-			new Vector2(x + spar.Rect.Width, y),
-			new Vector2(x + spar.Rect.Width, y + spar.Rect.Height),
-			new Vector2(x, y + spar.Rect.Height)
+			new Vector2(x + spar.Width, y),
+			new Vector2(x + spar.Width, y + spar.Height),
+			new Vector2(x, y + spar.Height)
 		], true) {
 			Layer = _sparsLayer
 		};
