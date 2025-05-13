@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public class UndoRedoService
 {

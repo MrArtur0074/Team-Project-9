@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project-9", "Project-9.csproj", "{A538CE97-D593-4037-9527-CDDF4FDBD3A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coswalt", "Coswalt.csproj", "{A538CE97-D593-4037-9527-CDDF4FDBD3A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

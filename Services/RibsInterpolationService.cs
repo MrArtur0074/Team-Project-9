@@ -4,11 +4,11 @@ using System.Linq;
 using netDxf.Blocks;
 using netDxf.Entities;
 using netDxf.Tables;
-using Project_9.Models;
+using Coswalt.Models;
 using Vector2 = netDxf.Vector2;
 using Vector3 = netDxf.Vector3;
 
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public class RibsInterpolationService
 {

@@ -1,6 +1,6 @@
-using Project_9.Services;
+using Coswalt.Services;
 
-namespace Project_9.Models.Commands;
+namespace Coswalt.Models.Commands;
 
 public class RibCommand(
 	RibCollection ribs,

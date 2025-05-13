@@ -1,4 +1,4 @@
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public interface IUndoableCommand
 {

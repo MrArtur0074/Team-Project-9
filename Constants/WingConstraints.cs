@@ -1,4 +1,4 @@
-namespace Project_9.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Provides predefined wing parameter limits for aerodynamic models.

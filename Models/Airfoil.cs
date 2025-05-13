@@ -1,7 +1,7 @@
 using System.Linq;
 using netDxf;
 
-namespace Project_9.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Represents an airfoil as a collection of points defining its shape.
