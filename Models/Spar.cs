@@ -22,6 +22,7 @@ public abstract class Spar
 	/// <param name="endRib">The ending rib index of the spar.</param>
 	/// <param name="startChordOffset">The offset from the leading edge of the wing at the start rib.</param>
 	/// <param name="endChordOffset">The offset from the leading edge of the wing at the end rib.</param>
+	/// <param name="yOffset">The vertical offset of spar's center.</param>
 	/// <param name="alignment">The alignment type of the spar.</param>
 	/// <exception cref="ArgumentException">Thrown when the rib count is less than 2.</exception>
 	/// <exception cref="ArgumentOutOfRangeException">
@@ -33,6 +34,7 @@ public abstract class Spar
 		int endRib,
 		double startChordOffset,
 		double endChordOffset,
+		double yOffset,
 		AlignmentType alignment
 	) {
 		RibCount = ribCount;
@@ -41,6 +43,7 @@ public abstract class Spar
 		StartChordOffset = startChordOffset;
 		EndChordOffset = endChordOffset;
 		Alignment = alignment;
+		YOffset = yOffset;
 	}
 
 	/// <summary>
@@ -136,6 +139,8 @@ public abstract class Spar
 			_endChordOffset = value;
 		}
 	}
+	
+	public double YOffset { get; set; } = 0.0;
 
 	/// <summary>
 	/// Gets or sets the alignment type of the spar.

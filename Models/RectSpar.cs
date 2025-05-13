@@ -19,9 +19,12 @@ public class RectSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Rectangle rect
-	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
-		Rect = rect;
+		double yOffset,
+		double height,
+		double width
+	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, yOffset, alignment) {
+		Height = height;
+		Width = width;
 	}
 
 	/// <summary>
@@ -40,7 +43,13 @@ public class RectSpar : Spar
 	public ProfileAlignmentType ProfileAlignment { get; set; }
 
 	/// <summary>
-	/// Gets or sets the rectangle defining the spar's profile.
+	/// Gets of sets the height of the rectangle.
 	/// </summary>
-	public RectangleF Rect { get; set; }
+	public double Height { get; set; }
+	
+	
+	/// <summary>
+	/// Gets of sets the width of the rectangle.
+	/// </summary>
+	public double Width { get; set; }
 }
