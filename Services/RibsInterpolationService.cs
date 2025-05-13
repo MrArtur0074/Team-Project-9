@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using netDxf.Blocks;
 using netDxf.Entities;
-using netDxf.GTE;
 using netDxf.Tables;
 using Project_9.Models;
 using Vector2 = netDxf.Vector2;
@@ -101,48 +100,117 @@ public class RibsInterpolationService
 
 			switch (spar) {
 				case RectSpar rectSpar:
-					AddRectSparToRib(rib, rectSpar, chordOffset);
+					AddRectSparToRib(rib, rectSpar, chordOffset, i);
 					break;
 				case CircleSpar circleSpar:
-					AddCircleSparToRib(rib, circleSpar, chordOffset);
+					AddCircleSparToRib(rib, circleSpar, chordOffset, i);
 					break;
 			}
 		}
 	}
 
-	private void AddCircleSparToRib(Block rib, CircleSpar spar, double chordOffset) {
-		var circle = new Circle(new Vector2(chordOffset, 0.0), spar.Radius) {
-			Layer = _sparsLayer
-		};
+	private void AddCircleSparToRib(Block rib, CircleSpar spar, double chordOffset, int ribIndex) {
+		Airfoil airfoil = _interpolatedAirfoils[ribIndex];
+		double chordLength = CalculateChordLength(ribIndex);
+		var transformedPoints = airfoil.GetPointsSelig()
+			.Select(p => TransformPoint(p, chordLength))
+			.ToList();
+
+		var (upperY, lowerY) = GetAirfoilYBounds(transformedPoints, chordOffset);
+
+		if (spar.Radius > (upperY - lowerY) / 2.0) {
+			throw new ArgumentOutOfRangeException(nameof(spar.Radius), "Radius exceeds airfoil thickness.");
+		}
+		
+		if (spar.YOffset - spar.Radius < lowerY || spar.YOffset + spar.Radius > upperY) {
+			throw new ArgumentException("Circle spar exceeds airfoil boundaries.");
+		}
+
+		var circle = new Circle(new Vector2(chordOffset, spar.YOffset), spar.Radius) { Layer = _sparsLayer };
 		rib.Entities.Add(circle);
 	}
 
-	private void AddRectSparToRib(Block rib, RectSpar spar, double chordOffset) {
-		double x = spar.Width / 2.0 + chordOffset;
-		double y = spar.Height / 2.0;
+	private void AddRectSparToRib(Block rib, RectSpar spar, double chordOffset, int ribIndex) {
+		Airfoil airfoil = _interpolatedAirfoils[ribIndex];
+		double chordLength = CalculateChordLength(ribIndex);
+		var transformedPoints = airfoil.GetPointsSelig()
+			.Select(p => TransformPoint(p, chordLength))
+			.ToList();
 
-		var rect = new Polyline2D([
-			new Vector2(x, y),
-			new Vector2(x + spar.Width, y),
-			new Vector2(x + spar.Width, y + spar.Height),
-			new Vector2(x, y + spar.Height)
-		], true) {
-			Layer = _sparsLayer
-		};
+		var (upperY, lowerY) = GetAirfoilYBounds(transformedPoints, chordOffset);
 
+		double xStart = chordOffset - spar.Width / 2;
+		double yPosition = CalculateRectYPosition(spar, upperY, lowerY);
+
+		if (xStart < 0 || xStart + spar.Width > chordLength)
+			throw new ArgumentException("Rectangular spar exceeds chord boundaries.");
+		
+		if (yPosition < lowerY || yPosition + spar.Height > upperY)
+			throw new ArgumentException("Rectangular spar exceeds airfoil boundaries.");
+
+		var rect = new Polyline2D(new[] {
+			new Vector2(xStart, yPosition),
+			new Vector2(xStart + spar.Width, yPosition),
+			new Vector2(xStart + spar.Width, yPosition + spar.Height),
+			new Vector2(xStart, yPosition + spar.Height)
+		}, true) { Layer = _sparsLayer };
 
 		rib.Entities.Add(rect);
+	}
+
+	private double CalculateRectYPosition(RectSpar spar, double upperY, double lowerY) {
+		return spar.ProfileAlignment switch {
+			RectSpar.ProfileAlignmentType.Upper => upperY + spar.YOffset - spar.Height,
+			RectSpar.ProfileAlignmentType.Lower => lowerY + spar.YOffset,
+			RectSpar.ProfileAlignmentType.Custom => spar.YOffset - spar.Height / 2,
+			_ => throw new ArgumentOutOfRangeException()
+		};
+	}
+
+	private (double upperY, double lowerY) GetAirfoilYBounds(List<Vector2> points, double x) {
+		var upper = new List<Vector2>();
+		var lower = new List<Vector2>();
+		int mid = points.Count / 2;
+
+		for (int i = 0; i < mid; i++)
+			upper.Add(points[i]);
+		for (int i = mid; i < points.Count; i++)
+			lower.Add(points[i]);
+
+		double upperY = InterpolateYAtX(upper.OrderBy(p => p.X).ToList(), x);
+		double lowerY = InterpolateYAtX(lower.OrderBy(p => p.X).ToList(), x);
+		return (upperY, lowerY);
+	}
+
+	private double InterpolateYAtX(List<Vector2> points, double x) {
+		for (int i = 0; i < points.Count - 1; i++) {
+			if (points[i].X <= x && points[i + 1].X >= x) {
+				double t = (x - points[i].X) / (points[i + 1].X - points[i].X);
+				return points[i].Y + t * (points[i + 1].Y - points[i].Y);
+			}
+		}
+		return points.OrderBy(p => Math.Abs(p.X - x)).First().Y;
 	}
 
 	private double CalculateSparChordOffset(Spar spar, int ribIndex) {
 		switch (spar.Alignment) {
 			case Spar.AlignmentType.Linear:
-				double x = (_wing.Ribs[ribIndex] - _wing.Ribs[spar.StartRib]) /
-				           (_wing.Ribs[spar.EndRib] - _wing.Ribs[spar.StartRib]);
-				return spar.StartChordOffset + x * (spar.EndChordOffset - spar.StartChordOffset);
+				double startPos = _wing.Ribs[spar.StartRib];
+				double endPos = _wing.Ribs[spar.EndRib];
+				double ribPos = _wing.Ribs[ribIndex];
+				double t = (ribPos - startPos) / (endPos - startPos);
+				double interpolated = spar.StartChordOffset + t * (spar.EndChordOffset - spar.StartChordOffset);
+				double chordLength = CalculateChordLength(ribIndex);
+				double offset = interpolated * chordLength;
+
+				if (offset < 0 || offset > chordLength)
+					throw new ArgumentOutOfRangeException(nameof(offset), "Offset exceeds chord length.");
+
+				return offset;
 			case Spar.AlignmentType.Interpolated:
 				throw new NotImplementedException("Interpolated alignment is not implemented.");
+			default:
+				return 0.0;
 		}
-		return 0.0;
 	}
 }
