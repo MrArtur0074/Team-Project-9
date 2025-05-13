@@ -1,4 +1,4 @@
-using Avalonia;
+using System.Drawing;
 
 namespace Project_9.Models;
 
@@ -11,7 +11,7 @@ public class RectSpar : Spar
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RectSpar"/> class with the specified parameters.
 	/// </summary>
-	/// <param name="rectangle">The rectangle describing the spar's profile.</param>
+	/// <param name="rect">The rectangle describing the spar's profile.</param>
 	public RectSpar(
 		int ribCount,
 		int startRib,
@@ -19,9 +19,12 @@ public class RectSpar : Spar
 		double startChordOffset,
 		double endChordOffset,
 		AlignmentType alignment,
-		Rect rectangle
-	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, alignment) {
-		Rectangle = rectangle;
+		double yOffset,
+		double height,
+		double width
+	) : base(ribCount, startRib, endRib, startChordOffset, endChordOffset, yOffset, alignment) {
+		Height = height;
+		Width = width;
 	}
 
 	/// <summary>
@@ -40,7 +43,13 @@ public class RectSpar : Spar
 	public ProfileAlignmentType ProfileAlignment { get; set; }
 
 	/// <summary>
-	/// Gets or sets the rectangle defining the spar's profile.
+	/// Gets of sets the height of the rectangle.
 	/// </summary>
-	public Rect Rectangle { get; set; }
+	public double Height { get; set; }
+	
+	
+	/// <summary>
+	/// Gets of sets the width of the rectangle.
+	/// </summary>
+	public double Width { get; set; }
 }

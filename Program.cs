@@ -1,21 +1,36 @@
-﻿using Avalonia;
-using System;
+﻿using System;
+using System.IO;
+using System.Linq;
+using netDxf.Header;
+using Project_9.Services;
 
 namespace Project_9;
 
-sealed class Program
+public static class Program
 {
-	// Initialization code. Don't use any Avalonia, third-party APIs or any
-	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-	// yet and stuff might break.
-	[STAThread]
-	public static void Main(string[] args) => BuildAvaloniaApp()
-		.StartWithClassicDesktopLifetime(args);
+	public static void Main(string[] args) {
+		if (args.Length == 0) {
+			Console.WriteLine("Provide path to JSON configuration file");
+			return;
+		}
 
-	// Avalonia configuration, don't remove; also used by visual designer.
-	public static AppBuilder BuildAvaloniaApp()
-		=> AppBuilder.Configure<App>()
-			.UsePlatformDetect()
-			.WithInterFont()
-			.LogToTrace();
+		try {
+			var wing = new WingJsonParserService().ParseWingFromJson(args[0]);
+			var blocks = new RibsInterpolationService().Interpolate(wing).ToList();
+
+			var result = DxfExportService.Export(
+				Path.ChangeExtension(args[0], ".dxf"),
+				blocks,
+				DxfVersion.AutoCad2018,
+				true);
+
+			Console.WriteLine(!result.IsSuccess
+				? $"Error: {result.ErrorMessage}"
+				: "Wing successfully generated!"
+			);
+		}
+		catch (Exception ex) {
+			Console.WriteLine($"Error: {ex.Message}");
+		}
+	}
 }

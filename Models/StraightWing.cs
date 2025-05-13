@@ -12,8 +12,8 @@ public class StraightWing : Wing
 	/// </summary>
 	public StraightWing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle
 	) : base(name, rootChord, span, incidenceAngle) {
 	}
@@ -24,8 +24,8 @@ public class StraightWing : Wing
 	/// </summary>
 	public StraightWing(
 		string name,
-		int rootChord,
-		int span,
+		double rootChord,
+		double span,
 		double incidenceAngle,
 		Airfoil rootAirfoil,
 		Airfoil tipAirfoil
@@ -37,6 +37,6 @@ public class StraightWing : Wing
 	}
 
 	public override double GetAspectRatio() {
-		return (double)Span / RootChord;
+		return Span / RootChord;
 	}
 }

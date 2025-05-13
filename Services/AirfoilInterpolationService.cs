@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using Aspose.CAD.Primitives;
+using netDxf;
 using Project_9.Models;
 using Project_9.Settings;
 
@@ -9,35 +9,34 @@ namespace Project_9.Services;
 public static class AirfoilsInterpolationService
 {
 	private static Airfoil UnifyAirfoil(Airfoil airfoil) {
-		var upperSurface = airfoil.Points.Where(point => point.isUpper).Select(point => point.point).ToArray();
-		var lowerSurface = airfoil.Points.Where(point => !point.isUpper).Select(point => point.point).ToArray();
+		var settings = AirfoilInterpolationSettings.Instance();
+		var upperPoints = UnifySurface(airfoil.UpperPoints, settings.UpperPointsCount);
+		var lowerPoints = UnifySurface(airfoil.LowerPoints, settings.LowerPointsCount);
 
-		var name = $"{airfoil.Name}-unified";
-		var points = new List<(Point2D, bool)>();
-
-		points.AddRange(UnifySurface(upperSurface, true, AirfoilInterpolationSettings.Instance().UpperPointsCount));
-		points.AddRange(UnifySurface(lowerSurface, false, AirfoilInterpolationSettings.Instance().LowerPointsCount));
-
-		return new Airfoil(name, points.ToArray());
+		return new Airfoil($"{airfoil.Name} UNIFIED", upperPoints, lowerPoints);
 	}
 
-	private static (Point2D, bool)[] UnifySurface(Point2D[] surfacePoints, bool isUpper, int pointsCount) {
-		var points = new (Point2D, bool)[pointsCount];
-
-		double xMin = surfacePoints.Min(point => point.X);
-		double xMax = surfacePoints.Max(point => point.X);
+	private static Vector2[] UnifySurface(Vector2[] surfacePoints, int pointsCount) {
+		var sorted = surfacePoints.OrderBy(p => p.X).ToArray();
+		double xMin = sorted.First().X;
+		double xMax = sorted.Last().X;
 		double step = (xMax - xMin) / (pointsCount - 1);
 
+		var points = new Vector2[pointsCount];
 		for (int i = 0; i < pointsCount; ++i) {
 			double xNew = xMin + i * step;
-			double yNew = InterpolateY(surfacePoints, xNew);
-			points[i] = (new(xNew, yNew), isUpper);
+			double yNew = InterpolateY(sorted, xNew);
+			points[i] = new Vector2(xNew, yNew);
 		}
 
 		return points;
 	}
 
-	private static double InterpolateY(Point2D[] points, double x) {
+	private static double InterpolateY(Vector2[] points, double x) {
+		if (x < points[0].X || x > points[^1].X)
+			throw new ArgumentOutOfRangeException(nameof(x),
+				$"x={x} is outside interpolation range [{points[0].X}, {points[^1].X}]");
+
 		for (int i = 0; i < points.Length - 1; i++) {
 			if (points[i].X <= x && x <= points[i + 1].X) {
 				double x1 = points[i].X, y1 = points[i].Y;
@@ -49,37 +48,41 @@ public static class AirfoilsInterpolationService
 	}
 
 	private static Airfoil InterpolateAirfoil(Airfoil rootAirfoil, Airfoil tipAirfoil, double ratio) {
-		var rootPoints = rootAirfoil.Points;
-		var tipPoints = tipAirfoil.Points;
+		var name = $"{rootAirfoil.Name} - {tipAirfoil.Name} {ratio:F4}";
+		var upperPoints = InterpolateSurface(rootAirfoil.UpperPoints, tipAirfoil.UpperPoints, ratio);
+		var lowerPoints = InterpolateSurface(rootAirfoil.LowerPoints, tipAirfoil.LowerPoints, ratio);
 
-		var name = $"{rootAirfoil.Name}-{tipAirfoil.Name}-{ratio}";
-		var points = new (Point2D, bool)[rootPoints.Length];
+		return new Airfoil(name, upperPoints, lowerPoints);
+	}
 
-		for (int i = 0; i < points.Length; ++i) {
-			var rootPoint = rootPoints[i].point;
-			var tipPoint = tipPoints[i].point;
+	private static Vector2[] InterpolateSurface(Vector2[] rootPoints, Vector2[] tipPoints, double ratio) {
+		if (rootPoints.Length != tipPoints.Length)
+			throw new ArgumentException("Root and tip surface points must be the same!");
+
+		var points = new Vector2[rootPoints.Length];
+		for (int i = 0; i < rootPoints.Length; ++i) {
+			Vector2 rootPoint = rootPoints[i];
+			Vector2 tipPoint = tipPoints[i];
 			var x = rootPoint.X + (tipPoint.X - rootPoint.X) * ratio;
 			var y = rootPoint.Y + (tipPoint.Y - rootPoint.Y) * ratio;
-			points[i] = (new(x, y), rootPoints[i].isUpper);
+			points[i] = new Vector2(x, y);
 		}
 
-		return new Airfoil(name, points);
+		return points;
 	}
 
 	public static Airfoil[] Interpolate(
-		Airfoil rootAirfoil, Airfoil tipAirfoil, int span, RibCollection ribCollection
+		Airfoil rootAirfoil, Airfoil tipAirfoil, RibCollection ribCollection
 	) {
-		var ribs = ribCollection.Ribs;
-		int ribsCount = ribs.Count;
-
+		int ribsCount = ribCollection.Count;
 		var airfoils = new Airfoil[ribsCount];
 
-		var unifiedRootAirfoil = UnifyAirfoil(rootAirfoil);
-		var unifiedTipAirfoil = UnifyAirfoil(tipAirfoil);
+		Airfoil unifiedRoot = UnifyAirfoil(rootAirfoil);
+		Airfoil unifiedTip = UnifyAirfoil(tipAirfoil);
 
 		for (int i = 0; i < ribsCount; ++i) {
-			var ratio = ribs[i] / span;
-			airfoils[i] = InterpolateAirfoil(unifiedRootAirfoil, unifiedTipAirfoil, ratio);
+			var ratio = ribCollection[i];
+			airfoils[i] = InterpolateAirfoil(unifiedRoot, unifiedTip, ratio);
 		}
 
 		return airfoils;
