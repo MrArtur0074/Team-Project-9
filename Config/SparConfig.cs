@@ -1,4 +1,4 @@
-namespace Project_9.Parsers;
+namespace Coswalt.Parsers;
 
 public class SparConfig
 {

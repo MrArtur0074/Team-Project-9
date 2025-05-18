@@ -1,4 +1,4 @@
-namespace Oswalt.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Represent the profile of wing spar.

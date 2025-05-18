@@ -4,7 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Oswalt.Config;
+namespace Coswalt.Config;
 
 public static class Config
 {

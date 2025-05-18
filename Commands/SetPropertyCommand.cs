@@ -1,6 +1,6 @@
-using Oswalt.Services;
+using Coswalt.Services;
 
-namespace Oswalt.Models;
+namespace Coswalt.Models;
 
 public class SetPropertyCommand<T>(object target, string propertyName, T newValue) : IUndoableCommand
 {

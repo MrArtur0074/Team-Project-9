@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace Oswalt.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Represents a spar in an aircraft wing with a rectangular profile.

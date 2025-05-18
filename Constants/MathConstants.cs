@@ -1,4 +1,4 @@
-namespace Oswalt.Constants;
+namespace Coswalt.Constants;
 
 public class MathConstants
 {

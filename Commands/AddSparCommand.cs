@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Oswalt.Services;
+using Coswalt.Services;
 
-namespace Oswalt.Models.Commands;
+namespace Coswalt.Models.Commands;
 
 public class AddSparCommand(List<Spar> spars, Spar spar) : IUndoableCommand
 {
