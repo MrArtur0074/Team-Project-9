@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Coswalt.Views.ProfilesTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Airfoils" Style="{DynamicResource TabsTittle}"/>
+            
+
+            <StackPanel Margin="0 0 0 10">
+                <TextBlock Text="Root airfoil" Style="{DynamicResource PlaceholderTittle}"/>
+                <ComboBox 
+          ItemsSource="{Binding AirfoilOptions}"
+          SelectedItem="{Binding SelectedRootAirfoil}"
+          Style="{DynamicResource BlenderComboBoxStyle}"/>
+
+
+            </StackPanel>
+
+            <StackPanel Margin="0 0 0 20" >
+                <TextBlock Text="Tip airfoil" Style="{DynamicResource PlaceholderTittle}" />
+                <ComboBox Height="30"
+          ItemsSource="{Binding AirfoilOptions}"
+          SelectedItem="{Binding SelectedTipAirfoil}"
+          Style="{DynamicResource BlenderComboBoxStyle}"/>
+
+
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,20,0,0">
+            <Button Content="Back" Width="92" Height="24" Margin="0 0 10 0"
+                    Style="{DynamicResource ButtonStyle}" 
+            Command="{Binding DataContext.BackTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+            <Button Content="Next"
+            Style="{DynamicResource ButtonStyle}"   
+            Command="{Binding DataContext.NextTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+            Width="92" Height="24" />
+        </StackPanel>
+    </Grid>
+</UserControl>

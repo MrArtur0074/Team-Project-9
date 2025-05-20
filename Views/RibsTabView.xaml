@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Coswalt.Views.RibsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Top">
+            <TextBlock Text="Ribs" Style="{DynamicResource TabsTittle}" />
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Ribs number [2; -]:" Style="{DynamicResource PlaceholderTittle}" />
+                <TextBox Style="{DynamicResource TextBoxStyle}"
+                         Width="Auto"
+
+                         Text="{Binding RibsNumber, UpdateSourceTrigger=LostFocus}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical"
+                        Visibility="{Binding IsTipExclusionRatioVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="Tip exclusion ratio [0.1; 0.5]:" Style="{DynamicResource PlaceholderTittle}" />
+                <TextBox Style="{DynamicResource TextBoxStyle}"
+                         Width="Auto"
+                         Text="{Binding TipExclusionRatio, UpdateSourceTrigger=LostFocus}" />
+            </StackPanel>
+
+            <StackPanel>
+                <Button Content="Add between nearest"
+                        Margin="0,0,0,10"
+                        Style="{DynamicResource RibButtonStyle}" />
+                <Button Content="Remove"
+                        Margin="0,0,0,10"
+                        Style="{DynamicResource RibButtonStyle}" />
+                <Button Content="Shift"
+                        Margin="0,0,0,10"
+                        Style="{DynamicResource RibButtonStyle}" />
+                <Button Content="Reset"
+                        Margin="0,0,0,10"
+                        Style="{DynamicResource RibButtonStyle}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Назад" Width="92" Height="24" Margin="0 0 10 0"
+                    Style="{DynamicResource ButtonStyle}"
+                    Command="{Binding DataContext.BackTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+
+            <Button Content="Продолжить" Style="{DynamicResource ButtonStyle}"
+                    Command="{Binding DataContext.NextTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Width="92" Height="24" />
+        </StackPanel>
+    </Grid>
+</UserControl>

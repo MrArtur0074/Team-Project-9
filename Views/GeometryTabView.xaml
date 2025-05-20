@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="Coswalt.Views.GeometryTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Coswalt.Converters"
+             mc:Ignorable="d"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Top">
+            <TextBlock Text="Geometry parameters" Style="{DynamicResource TabsTittle}" />
+
+            <TextBlock Text="Planform:" Style="{DynamicResource PlaceholderTittle}" />
+            <ComboBox ItemsSource="{Binding PlanformOptions}"
+                      SelectedItem="{Binding SelectedPlanform, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource BlenderComboBoxStyle}"
+                      Foreground="White" />
+
+            
+            <StackPanel Visibility="{Binding IsTaperedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="Taper ratio [0.1; 1]" Style="{DynamicResource PlaceholderTittle}" />
+                <TextBox Text="{Binding TaperRatio, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource TextBoxStyle}" />
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding IsEllipticalVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="Sweer coefficient [-1, 1]" Style="{DynamicResource PlaceholderTittle}" />
+                <TextBox Text="{Binding SweepCoefficient, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource TextBoxStyle}" />
+            </StackPanel>
+
+            <TextBlock Text="Span, mm [500; 5000]" Style="{DynamicResource PlaceholderTittle}" />
+            <TextBox Text="{Binding Span, UpdateSourceTrigger=LostFocus}" Style="{StaticResource TextBoxStyle}" />
+
+            <TextBlock Text="Incidence angle, degree [-5; 15]" Style="{DynamicResource PlaceholderTittle}" />
+            <TextBox Text="{Binding IncidenceAngle, UpdateSourceTrigger=LostFocus}"
+                     Style="{StaticResource TextBoxStyle}" />
+
+            <TextBlock Text="Root chord length, mm [100; 1000]" Style="{DynamicResource PlaceholderTittle}" />
+            <TextBox Text="{Binding RootChordLength, UpdateSourceTrigger=LostFocus}"
+                     Style="{StaticResource TextBoxStyle}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Next"
+                    Style="{DynamicResource ButtonStyle}"
+                    Width="92" Height="24"
+                    Command="{Binding DataContext.NextTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
