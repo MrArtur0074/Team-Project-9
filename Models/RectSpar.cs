@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace Coswalt.Models;
 
 /// <summary>
