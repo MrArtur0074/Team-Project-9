@@ -4,11 +4,11 @@ using Coswalt.Services;
 
 namespace Coswalt.ViewModels.Tabs;
 
-public class ProfilesTabViewModel : BaseViewModel
+public class AirfoilsTabViewModel : BaseViewModel
 {
     private readonly IAirfoilService _airfoilService;
 
-    public ObservableCollection<string> AirfoilOptions { get; } = []; // TODO: fix it
+    public ObservableCollection<string> AirfoilOptions { get; } = [];
 
     private string _selectedRootAirfoil;
 
@@ -24,7 +24,7 @@ public class ProfilesTabViewModel : BaseViewModel
         set => SetProperty(ref _selectedTipAirfoil, value);
     }
 
-    public ProfilesTabViewModel() {
+    public AirfoilsTabViewModel() {
         string csvPath = Path.Combine(AppContext.BaseDirectory,
             Config.Config.GetValue("AirfoilsCsvPath") ?? String.Empty);
         string dirPath = Path.Combine(AppContext.BaseDirectory,
