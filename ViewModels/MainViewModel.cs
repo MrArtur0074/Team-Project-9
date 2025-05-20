@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Coswalt.Models;
 using Coswalt.ViewModels.Tabs;
 using Coswalt.Views;
 using Coswalt.Services;
+using netDxf.Header;
 
 namespace Coswalt.ViewModels;
 
@@ -95,7 +98,7 @@ public class MainViewModel : BaseViewModel
 
         Tabs.Clear();
         Tabs["Geometry"] = new GeometryTabViewModel();
-        Tabs["Profiles"] = new ProfilesTabViewModel();
+        Tabs["Profiles"] = new AirfoilsTabViewModel();
         Tabs["Ribs"]     = new RibsTabViewModel();
         Tabs["Spars"]    = new SparsTabViewModel();
 
@@ -171,7 +174,16 @@ public class MainViewModel : BaseViewModel
     private void SaveFile() {
         var path = _fileService.SaveFile();
         if (!string.IsNullOrEmpty(path)) {
+            var wing = BuildWingFromViewModels();
             
+            var blocks = new RibsInterpolationService().Interpolate(wing).ToList();
+            var result = DxfExportService.Export(
+                Path.ChangeExtension(path, ".dxf"),
+                blocks,
+                DxfVersion.AutoCad2018,
+                true
+            );
+            Console.WriteLine(result);
         }
     }
 
@@ -210,5 +222,53 @@ public class MainViewModel : BaseViewModel
             MessageBox.Show($"Couldn't open web-site: {ex.Message}", "Error: ", MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
+    }
+
+    private Wing BuildWingFromViewModels() {
+        var geometry = (GeometryTabViewModel)Tabs["Geometry"];
+        var airfoils = (AirfoilsTabViewModel)Tabs["Profiles"];
+        var ribs = (RibsTabViewModel)Tabs["Ribs"];
+        var spars = (SparsTabViewModel)Tabs["Spars"];
+
+        string rootPath = AirfoilCsvHelperService
+            .GetPathByName(Config.Config.GetValue("AirfoilsCsvPath"), airfoils.SelectedRootAirfoil);
+        string tipPath = AirfoilCsvHelperService
+            .GetPathByName(Config.Config.GetValue("AirfoilsCsvPath"), airfoils.SelectedTipAirfoil);
+       
+        Airfoil rootAirfoil = AirfoilParserService.Parse(rootPath);
+        Airfoil tipAirfoil = AirfoilParserService.Parse(tipPath);
+        
+        Wing wing = geometry.SelectedPlanform.ToLower() switch {
+            "straight" => new StraightWing(
+                "Random Name",
+                geometry.RootChordLength,
+                geometry.Span,
+                geometry.IncidenceAngle,
+                rootAirfoil,
+                tipAirfoil),
+
+            "tapered" => new TaperedWing(
+                "Random Name",
+                geometry.RootChordLength,
+                geometry.Span,
+                geometry.IncidenceAngle,
+                rootAirfoil,
+                tipAirfoil,
+                double.Parse(geometry.TaperRatio)),
+
+            "elliptical" => new EllipticalWing(
+                "Random Name",
+                geometry.RootChordLength,
+                geometry.Span,
+                geometry.IncidenceAngle,
+                rootAirfoil,
+                tipAirfoil,
+                Double.Parse(geometry.SweepCoefficient),
+                ribs.TipExclusionRatio),
+
+            _ => throw new ArgumentException($"Unknown wing type: {geometry.SelectedPlanform}")
+        };
+
+        return wing;
     }
 }
