@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace Coswalt.Services;
+﻿using System.IO;
 
 public static class AirfoilCsvHelperService
 {
     public static string? GetPathByName(string csvFilePath, string nameToFind) {
         if (!File.Exists(csvFilePath))
             throw new FileNotFoundException("CSV file not found.", csvFilePath);
+
+        var airfoilsDirectory = Path.Combine(Path.GetDirectoryName(csvFilePath) ?? "", "airfoils");
 
         using var reader = new StreamReader(csvFilePath);
         string? line;
@@ -24,11 +22,13 @@ public static class AirfoilCsvHelperService
             if (parts.Length < 2)
                 continue;
 
-            string name = parts[0].Trim();
-            string path = parts[1].Trim();
+            string relativePath = parts[0].Trim();
+            string name = parts[1].Trim();
 
-            if (name.Equals(nameToFind, StringComparison.OrdinalIgnoreCase))
-                return path;
+            if (name.Equals(nameToFind, StringComparison.OrdinalIgnoreCase)) {
+                var fullPath = Path.Combine(airfoilsDirectory, relativePath);
+                return Path.GetFullPath(fullPath);
+            }
         }
 
         return null;
