@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using netDxf;
-using Project_9.Models;
-using Project_9.Settings;
+using Coswalt.Models;
+using Coswalt.Settings;
 
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public static class AirfoilsInterpolationService
 {

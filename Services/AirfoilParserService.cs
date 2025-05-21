@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using netDxf;
-using Project_9.Models;
+using Coswalt.Models;
 
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public static class AirfoilParserService
 {

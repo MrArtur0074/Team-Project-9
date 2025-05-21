@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Text.Json;
-using Project_9.Models;
-using Project_9.Parsers;
+using Coswalt.Models;
+using Coswalt.Parsers;
 
-namespace Project_9.Services;
+namespace Coswalt.Services;
 
 public class WingJsonParserService
 {

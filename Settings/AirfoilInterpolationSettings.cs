@@ -1,4 +1,4 @@
-namespace Project_9.Settings;
+namespace Coswalt.Settings;
 
 public sealed class AirfoilInterpolationSettings
 {

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Project_9.Constants;
+using Coswalt.Constants;
 
-namespace Project_9.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Represents a collection of ribs using normalized positions [0.0, 1.0].

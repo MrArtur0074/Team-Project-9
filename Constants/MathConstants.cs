@@ -1,4 +1,4 @@
-namespace Project_9.Constants;
+namespace Coswalt.Constants;
 
 public class MathConstants
 {

@@ -1,4 +1,4 @@
-namespace Project_9.Models;
+namespace Coswalt.Models;
 
 /// <summary>
 /// Represent the profile of wing spar.
