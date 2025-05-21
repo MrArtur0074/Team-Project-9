@@ -183,7 +183,6 @@ public class MainViewModel : BaseViewModel
                 DxfVersion.AutoCad2018,
                 true
             );
-            Console.WriteLine(result);
         }
     }
 
@@ -234,7 +233,10 @@ public class MainViewModel : BaseViewModel
             .GetPathByName(Config.Config.GetValue("AirfoilsCsvPath"), airfoils.SelectedRootAirfoil);
         string tipPath = AirfoilCsvHelperService
             .GetPathByName(Config.Config.GetValue("AirfoilsCsvPath"), airfoils.SelectedTipAirfoil);
-       
+        
+        Console.WriteLine($"Found root path: {rootPath} | for {airfoils.SelectedRootAirfoil}");
+        Console.WriteLine($"Found tip path: {tipPath} | for {airfoils.SelectedTipAirfoil}");
+        
         Airfoil rootAirfoil = AirfoilParserService.Parse(rootPath);
         Airfoil tipAirfoil = AirfoilParserService.Parse(tipPath);
         
