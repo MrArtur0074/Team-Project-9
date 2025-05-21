@@ -1,5 +1,3 @@
-using Vector2 = netDxf.Vector2;
-
 namespace Coswalt.Models;
 
 /// <summary>

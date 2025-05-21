@@ -1,5 +1,3 @@
-using System;
-
 namespace Coswalt.Models;
 
 /// <summary>

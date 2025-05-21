@@ -1,0 +1,149 @@
+﻿<Window x:Class="Coswalt.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:Coswalt.ViewModels"
+        mc:Ignorable="d"
+        Icon="pack://application:,,,/Assets/app.ico"
+        Title="Coswalt"
+        Height="720"
+        Width="1280"
+        Background="{StaticResource BackgroundDarkBrush}"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        ResizeMode="CanResizeWithGrip"
+        WindowState="Maximized"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveFileCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Coswalt;component/Resources/Styles.xaml"/>
+
+                <!-- Стили для меню -->
+                <ResourceDictionary>
+                    <Style TargetType="Menu">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="{DynamicResource WhiteText}"/>
+                    </Style>
+
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="{DynamicResource WhiteText}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        
+
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+
+    <DockPanel>
+        <!-- Кастомная шапка -->
+        <Grid DockPanel.Dock="Top" Background="{StaticResource BackgroundDarkerBrush}" Height="35" RenderTransformOrigin="0.531,0.429">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Меню -->
+            <Menu VerticalAlignment="Center" HorizontalAlignment="Left" Background="{StaticResource BackgroundDarkerBrush}" Height="32" Padding="0 0 30 0">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <Image Source="pack://application:,,,/Assets/app.png" Width="32"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem Header="Файл" >
+                    <MenuItem Header="Открыть" Command="{Binding OpenFileCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                    <MenuItem Header="Сохранить" Command="{Binding SaveFileCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                    <Separator />
+                    <MenuItem Header="Вернуться на главный экран" Command="{Binding ReturnToStartCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                </MenuItem>
+
+                <MenuItem Header="Правка">
+                    <MenuItem Header="Отменить" Command="{Binding UndoCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                    <MenuItem Header="Восстановить" Command="{Binding RedoCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                </MenuItem>
+
+                <MenuItem Header="Справка">
+                    <MenuItem Header="О программе" Command="{Binding AboutCommand}" Background="{StaticResource MenuBackgroundBrush}"/>
+                </MenuItem>
+            </Menu>
+
+            <!-- Центральные кнопки -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" Height="30">
+                <Button Content="Интерполяция нервюр" 
+                        Command="{Binding ShowEditorCommand}" 
+                        Style="{StaticResource TabButtonStyle}"
+                        />
+
+                <Button Content="Создание профилей" 
+                        Style="{StaticResource TabButtonStyle}"
+                        />
+                <Button Content="Редактирование профилей" 
+        Style="{StaticResource TabButtonStyle}"
+                        />
+                <Button Content="Аэродинамический анализ профиля" 
+        Style="{StaticResource TabButtonStyle}"
+                        />
+            </StackPanel>
+
+            <!-- Кнопки управления окном -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Content="—" 
+            Command="{Binding MinimizeWindowCommand}" 
+            Style="{StaticResource WindowButtonStyle}"/>
+
+                <Button Content="🗖" 
+            Command="{Binding ToggleMaximizeCommand}" 
+            Style="{StaticResource WindowButtonStyle}"/>
+
+                <Button Content="✕" 
+            Command="{Binding CloseWindowCommand}" 
+            Style="{StaticResource CloseButtonStyle}"/>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Вкладки -->
+        <StackPanel DockPanel.Dock="Top" 
+                   Orientation="Horizontal"
+                    VerticalAlignment="Bottom"
+                    
+                   Visibility="{Binding IsEditorVisible}" 
+                   Background="{StaticResource BackgroundDarkTabsBrush}" 
+                   Height="30">
+            <Button Content="Геометрические параметры" 
+                    Command="{Binding SwitchToGeometryTabCommand}" 
+                    Style="{StaticResource TabButtonStyle}"/>
+
+            <Button Content="Профили" 
+                    Command="{Binding SwitchToProfilesTabCommand}" 
+                    Style="{StaticResource TabButtonStyle}"/>
+            <Button Content="Нервюры" 
+                    Command="{Binding SwitchToRibsTabCommand}" 
+                    Style="{StaticResource TabButtonStyle}"/>
+            <Button Content="Лонжероны" 
+                    Command="{Binding SwitchToSparsTabCommand}" 
+                    Style="{StaticResource TabButtonStyle}"/>
+        </StackPanel>
+
+        <!-- Основной контент -->
+        <ContentControl Content="{Binding CurrentView}"/>
+    </DockPanel>
+</Window>
